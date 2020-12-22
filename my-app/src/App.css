@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.backgroundImg {
+  background-Image:url(/Users/styada/Coding/styada.github.io/my-app/src/assets/SaiSuchirTyadaHeadshot.jpg); 
+}
