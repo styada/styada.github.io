@@ -46,7 +46,7 @@ Tables are used to display data in a structured format.
     topRadius="l"
     preview={
     <Table 
-      data={
+      data={{
         headers: [
           { content: "Name", key: "name", sortable: true },
           { content: "Type", key: "type", sortable: true },
@@ -58,7 +58,7 @@ Tables are used to display data in a structured format.
           ["updatedAt", "string", "The date when the document was last updated"],
           ["navLabel", "string", "The label used in navigation menus"]
         ]
-      }
+      }}
     />}
     codes={[
       {
