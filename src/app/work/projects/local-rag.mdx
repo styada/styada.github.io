@@ -1,0 +1,104 @@
+---
+title: "Retrieval Augmented Generation"
+summary: "To help with my studies at Georgia Tech, I created a local RAG system that is completely private and cutoff from the internet."
+publishedAt: "2025-02-12"
+images:
+  - "/images/projects/local-rag/Retrieval-Augmented-Generation-RAG-KV-1.jpg"
+tag: "Machine Learning"
+---
+
+## Motivation
+
+As I started my studies at Georgia Tech, I realized very quickly that the same study patterns
+I used in my undergraduate days would not be as effective on my masters coursework. 
+Namely, I faced difficulties in consuming large amounts of textbook readings and 
+lengthy and numerous lectures, all easily enough to do on an undergraduate level but made 
+challenging while doing a full-time job at the same time.
+
+In my day-to-day work at the time, I was experimenting a lot with Retrieval Augmented Generation (RAG)
+pipelines. While the idea of building such a pipeline is easy enough, I also wanted to use it on
+the open-notes exams (with instructor approval of course). The main condition presented by the
+professor was that any tool I created could not at any point be connected to the internet nor 
+could the test content be susceptible to leakage.
+
+So I got to tinkering and exploring and as I scoured the reddit forums, I ran into [Ollama](https://ollama.com/).
+Ollama is part a marketplace of open-source LLMs, embedding models, and MLLMs and also part a framework
+that facilitates the local running of the Ollama downloaded models. The local rag side-project is a direct
+result of the perfect conditions and the perfect framework meeting.
+
+## RAG
+I am sure at this point if any person who has spent enough time looking at Generative AI would
+have already read articles on basic RAG details and maybe even graduated to agentic RAG.
+But I don't want to make that assumption. So here's my version of an explanation of RAG.
+
+While the full-form of RAG might put people off at first for how complicated it looks, the 
+actuality is quite different. If I were to put it in an analogy: if someone were to ask me 
+a question about a topic I don't know much about and demand an answer without looking it updated
+(a child perhaps), I would try my best to answer it within the boundaries of my knowledge.
+The answer could be correct or it could be completely off-mark and my pants should be on fire.
+Whereas, if I was allowed to look it up, I could get a much more accurate answer with the additional context.
+
+This analogy paints the perfect picture of how RAG should be imagined as. A pipeline that allows
+your LLM and MLLM the opportunity to retrieve additional context, augment its prompt that gets
+sent to the model, and generate more accurate responses. 
+
+## Model Discovery
+
+For the project, I first looked at more frontier models (e.g.Deepseek, Llama, Phi, and Mistral).
+Looking at the models I quickly realized 2 things, the larger models most of the public has access to
+are **HEAVY** in terms of storage and also memory usage. To put into perspective, Deepseek-r1
+is 404GB when downloaded. I had maybe 10GB to work with on my device. So I ended up choosing
+models with a lower parameter count that were closer to that 10GB upper bound. These models
+were very resource hungry and ate up all my 16GB of memory and the time-to-first-token 
+and tokens-per-second were painstakingly slow. The alternatives to the models were laughably
+ terrible in their response quality with some models even switching to Chinese or French in the
+ middle of an answer.
+
+So I did some more research and learned about model quantization and learned about the existence
+of specific instruct models. This was a large push on my path to getting the project working.
+I was finally able to use a model (mistral:7b-instruct-v0.3-q8_0) locally that was not 
+completely a failure at responding to questions. While the model was still not "snappy", it 
+met the conditions set forth by the instructor and above all, was private and **FREE**. 
+
+## Implementation
+
+The implementation of a local RAG system has been drastically streamlined with the introduction
+of libraries adding RAG features such as (HuggingFace, LangChain, etc.) For the ui, I ended up
+making use of another [open-source project](https://github.com/jackretterer/local-rag) 
+with major credits to [Jack Retterer](https://github.com/jackretterer). 
+
+I specifically chose this repo to fork as it does not abstract away a lot of details like the
+other libraries I mentioned do. I wanted complete control and understanding of how to construct
+a local RAG pipeline from scratch. The project was a bit dated so it did take some code wrangling to get it all to work. But when
+it was up it worked exactly as expected.
+
+## Data 
+
+A RAG pipeline is nothing without meaningful data ingested. For data, I didn't have to stretch too
+much as the textbooks were already in PDF form. I did end up having to curate a subset of chapters
+from the PDFs as they were too heavy at 300MB each and several hundreds of pages thick. 
+With data this dense on a model that is not on a production scale. I felt that the local RAG system would not be able to support and respond accurately and 
+ might hallucinate or take too long. Additionally, I modified the prompt so that each response came back with the exact book, 
+chapter, and page number of the context used so I can look up the section myself for secondary
+confirmation of information.
+
+For the lectures, at the time of creation there are not models that are powerful enough or 
+cheap enough to be able to handle 115 lecture videos even if I were to send them in one by one.
+Also, if I were to somehow be able to do the video ingestion, it would take too long for the model 
+to respond and then for me to do the secondary check on the content. 
+
+To get around this, I ended up making use of the subtitles and extracted those and then whipped up
+a quick Python script to convert them to markdown (.md) files and made use of those instead for 
+ingestion. The compromise here was that I would not be able to see any diagrams shown, but I 
+would be able to get exact information since subtitles are a little more deterministic in nature.
+
+## Gallery
+
+<Grid columns="1" gap="24" marginTop="16" marginBottom="16">
+  <Media src="/images/projects/local-rag/demo.gif" alt="Local RAG Demo" aspectRatio="16/9" radius="l" />
+  <p style={{ textAlign: 'center', fontSize: '0.95em', color: '#888', marginTop: '8px' }}>
+    GIF credit: <SmartLink href="https://github.com/jackretterer/local-rag" target="_blank">Jack Retterer</SmartLink>
+  </p>
+</Grid>
+
+
