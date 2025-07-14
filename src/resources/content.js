@@ -49,19 +49,19 @@ const home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
+  description: `Portfolio website showcasing the work and projects of ${person.name}.`,
   headline: <>Augmenting life with AI and curiosity</>,
   featured: {
     display: true,
-    title: <>Recent project: <strong className="ml-4">Once UI</strong></>,
-    href: "/work/building-once-ui-a-customizable-design-system",
+    title: <>Recent project: <strong className="ml-4">Computerized Reconstruction of Tomographic Images</strong></>,
+    href: "work/computerized-reconstruction-tomography/",
   },
   subline: (
     <>
-      Hi! I'm Sai!
+      Hi I'm Sai!
       <br /> I am an applied AI engineer at Target, where I work on enabling teams to build
       AI-powered tools. 
-      <br />After hours, I travel and follow my curiosity.
+      <br />After hours, I travel the world and follow my curiosity.
     </>
   ),
 };
@@ -80,7 +80,7 @@ const about = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "https://calendly.com/styada3-gatech/30min",
   },
   intro: {
     display: true,
@@ -91,6 +91,31 @@ const about = {
         His work involves building Target's internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs & MLLMs), and Kafka-based Appplication Monitoring platform. 
       </>
     ),
+  },
+    studies: {
+    display: true, // set to false to hide this section
+    title: "Education",
+    institutions: [
+      {
+        name: "Georgia Institute of Technology",
+        description: <>
+          <>Masters of Science in Computer Science</>
+          <>Interactive Intelligence Specialization</>
+        </> ,
+      },
+      {
+        name: "University of Minnesota - Twin Cities",
+        description: <>Bachelors of Arts in Mathematics</>,
+      },
+      {
+        name: "Oxford University",
+        description: <>Artificial Intelligence Programme</>,
+      },
+      {
+        name: "University of Minnesota - Twin Cities",
+        description: <>Bachelors of Science in Computer Science - AI Track</>,
+      },
+    ],
   },
   work: {
     display: true, // set to false to hide this section
@@ -236,28 +261,6 @@ const about = {
       ],
       images: [],
     }
-    ],
-  },
-  studies: {
-    display: true, // set to false to hide this section
-    title: "Education",
-    institutions: [
-      {
-        name: "Georgia Institute of Technology",
-        description: <>Masters of Science in Computer Science - AI Specialization</>,
-      },
-      {
-        name: "University of Minnesota - Twin Cities",
-        description: <>Bachelors of Arts in Mathematics</>,
-      },
-      {
-        name: "Oxford University",
-        description: <>Artificial Intelligence Programme</>,
-      },
-      {
-        name: "University of Minnesota - Twin Cities",
-        description: <>Bachelors of Science in Computer Science - AI Track</>,
-      },
     ],
   },
   technical: {

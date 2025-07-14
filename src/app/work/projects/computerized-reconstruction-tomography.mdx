@@ -1,0 +1,79 @@
+---
+title: "Thesis Work on Ill-Posed Inverse Problems"
+summary: "For my senior thesis at the University of Minnesota, I decided to dive deep into a class of problems known as Ill-Posed Inverse Problems. My work was supervised by Professor Ru-Yu Lai, whose guidance and support were invaluable."
+publishedAt: "2024-12-26"
+images:
+  - "/images/projects/research/tomography.png"
+tag: "Machine Learning"
+---
+
+# Solving Ill-Posed Inverse Problems with Computerized Reconstruction Approaches
+
+For my senior thesis at the University of Minnesota, I decided to dive deep into a class of problems known as Ill-Posed Inverse Problems. My work was supervised by [Professor Ru-Yu Lai](https://cse.umn.edu/math/ru-yu-lai), whose guidance and support were invaluable.
+
+The heart of this research is about taking incomplete or noisy data, like what you get from a low-dose CT scan, and trying to reconstruct what the underlying original image actually looks like. This is an interesting problem where both mathematics and machine learning play a critical role.
+A lot of my inspiration (and a decent chunk of the technical foundation) came from [Adler & Öktem’s 2017 paper](https://doi.org/10.1088/1361-6420/aa9581), which combined classical mathematical techniques with deep neural networks to take on the problem of image reconstruction.
+
+A major challenge with this research was the migration of framework and library versions for the original code from Adler & Öktem’s 2017 paper while preserving the logic that was created back then since the code had not been updated in 7 years.
+
+> _"The core of my research: using mathematics, computation, and machine learning to learn how to solve actual problems valuable and pertinent to humans."_
+
+## Abstract
+
+Most problems you run into in engineering or data science are “well-posed,” meaning the answer exists, is unique, and doesn’t fall apart if your input is a little noisy. Inverse problems don’t play by those rules. 
+
+<img
+  src="/images/projects/research/inverse.png"
+  alt="Basic idea of an inverse problem"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+<img
+  src="/images/projects/research/ill-posed-inverse.png"
+  alt="Basic idea of an ill-posed inverse problem"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+
+In this thesis, I explore several computerized reconstruction methods for solving ill posed inverse problems, focusing on cases where the forward operators may not be linear. I compare three main approaches: Learned Reconstruction, Learned Primal Dual Reconstruction, and Stochastic Primal Dual Hybrid Gradient (SPDHG) Reconstruction. The Learned Primal Dual method alternates updates between primal and dual variables, using techniques inspired by proximal operators to efficiently find optimal solutions. The Learned Reconstruction approach uses an iterative, gradient based algorithm powered by a convolutional neural network, incorporating information from previous iterations to improve performance. The SPDHG method extends the primal dual framework by randomly sampling data subsets during each iteration, increasing computational efficiency while maintaining accuracy. I tested these methods on a non linear medical tomography problem using simulated Shepp Logan phantom data. Notably, the learned methods, particularly the primal dual approach, achieved Peak Signal to Noise Ratios (PSNR) in the mid 40s (dB), which is a significant improvement over classical Filtered Back Projection results.
+
+## About the Research
+
+Beyond the technical challenges, I found this project interesting because it stitched together abstract mathematical theory with real machine learning practice and potential for real world impact. Working in this area offered the chance to not only advance my theoretical understanding, but also contribute to the development of practical tools that could make a difference in applied fields such as medical imaging.
+
+My work involved not just implementing algorithms, but also critically analyzing their effectiveness and limitations in a hands-on context. Dealing with legacy code (a right proper headache I will say) and the nuances of neural network training required patience and adaptability. These obstacles provided valuable experience and deeper insight into the practical aspects of modern computational research. Ultimately, this project reinforced for me the importance of bridging theory and application in order to address open problems that matter in practice.
+
+<img
+  src="/images/projects/research/radon_transfer.png"
+  alt="Mathematics of the Radon transform"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+To achieve this, we take data of mock brain scans and add random noise to the scans. We then trained a neural network at different intervals and applied concepts from the Radon Transform to provide the noisy scans to the model and see how close it can get to the original scan. 
+
+## Read or Download My Senior Thesis
+
+- [**View/Download PDF**](/documents/Senior_Thesis.pdf)
+
+<iframe
+  src="/documents/Senior_Thesis.pdf"
+  width="100%"
+  height="650"
+  style={{
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    marginTop: "1rem"
+  }}
+  title="Senior Thesis PDF Viewer"
+/>
+
+
+## References
+
+Adler, J., & Öktem, O. (2017). [Solving ill-posed inverse problems using iterative deep neural networks](https://doi.org/10.1088/1361-6420/aa9581). *Inverse Problems, 33*(12), 124007.
+
+
+If you want to nerd out about this research, chat about AI, or just talk math, [connect with me on LinkedIn](https://www.linkedin.com/in/saisuchirtyada).
