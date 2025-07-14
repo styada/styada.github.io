@@ -1,0 +1,98 @@
+---
+title: "Teaching a Machine Learning Model to Trade"
+summary: "In this project, I explored how both human intuition and machine learning can be used to automate trading decisions."
+publishedAt: "2025-04-28"
+images:
+    - "/images/projects/ml4t/Experiment2.png"
+    - "/images/projects/ml4t/Manual_Strategy_Out_Sample.png"
+tags: ["Machine Learning", "Algorithmic Trading", "Python", "Project Showcase"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Overview
+
+As part of my coursework at Georgia Tech, I set out to design and evaluate algorithmic trading
+strategies—essentially, getting a computer to make smart buy and sell decisions in the stock
+market. This project wasn’t about chasing the next “get rich quick” scheme, but about
+understanding how data-driven systems work in unpredictable, real-world environments.
+My goal was to compare two fundamentally different approaches: one based on classic
+trading rules, and the other leveraging machine learning.
+
+What made this project especially valuable was the hands-on integration of software engineering,
+quantitative analysis, and critical thinking. I designed modular indicator functions to enable
+experimentation, created unified interfaces for both strategy types, and developed a flexible
+market simulator for realistic testing. This experience reinforced the importance of both 
+clear understanding of problems (explaining the “why” behind each approach) and
+rigorous testing practices before trusting any automated system.
+
+## Key Concepts: Making Sense of Market Data
+
+To guide trading decisions, I built a set of tools that calculated **technical indicators**.
+These indicators are already widely used in finance and help showcase volume and momentum 
+movements in the market. For example:
+
+- **Exponential Moving Average (EMA)** and **Double EMA (DEMA):** These track price trends across
+different time intervals, making it easier to spot momentum shifts.
+- **MACD (Moving Average Convergence Divergence):** This indicator helps highlight when
+market momentum is building or fading by comparing fast and slow price trends.
+- **Bollinger Bands:** These create “boundaries” around typical price ranges at a set standard
+ deviation, highlighting when prices are unusually high or low.
+- **Relative Strength Index (RSI):** A score that indicates whether a stock might be
+ overbought or oversold, offering clues about potential turning points.
+
+By integrating these indicators, I gave my algorithms the ability to “see” patterns that
+ traders often use as cues for action.
+
+## Manual vs. Machine Learning Approaches
+
+The first strategy I implemented was completely rule-based. I used the technical indicators
+to code the trading heuristics. For example, buying when a stock appears undervalued based on
+multiple indicators, and selling when it seems overextended. The main strength here is
+transparency, you always know *why* a decision is being made.
+But, these rules can struggle with market complexity and subtle patterns and this is also what
+was noticed in the In-Sample and the Out-of-Sample testing.
+
+The second strategy was the model-based approach. I developed a machine learning system to
+analyze historical data, discover relationships among indicators, and generate its own buy
+and sell signals. This model doesn’t rely on any single rule but instead learns from data
+to adapt its decisions as conditions change. The system uses ensemble learning methods
+(multiple decision trees combined). By not just relying on a single decision tree, I could
+boost the trust factor that multiple decision trees all trained on different subsets of the 
+training data all averaged out to one decision.
+
+## Experimentation and Results
+
+To compare the performance of both strategies, I ran a series of backtests using historical 
+real market data on the J.P. Morgan ($JPM) stock ticker, simulating not just profits and losses but also real-world constraints 
+like transaction fees and market impact. In particular, the In-Sample data (the data that was trained on)
+was from Jan 1st, 2008 to Dec 31st, 2009. Covering a period of massive volatility in the market
+due to the Great Recession. The Out-of-Sample tests were conducted on data from Jan 1st, 2010 to 
+Dec 31st 2011. A period of time where the economy was recovering from the period of uncertainity.
+
+I found that the machine learning approach typically outperformed the manual rule-based 
+strategy, especially in more volatile markets. However, once I factored in trading costs on Out-of-Sample data, 
+the results flipped showing that even advanced algorithms need to account for the practical 
+realities of trading and not assume that investors have unlimited bankrolls.
+
+## Future Contributions
+
+If I were to extend this work, I would explore alternative features, such as trading volume 
+or sentiment data, and evaluate more advanced learning algorithms. I have a backlogged side-project
+that will take the concepts of this project one step further and implement it using [Alpaca](https://alpaca.markets/)
+for real money trading including baking in concepts about options trading and more granular
+strategies for trading besides buy-hold patterns.
+ 
+ Also, being that government and policy decisions are large motivators for the markets, 
+ I would want to introduce an Agentic AI system that can consider Tweets, news articles,
+ and any trending items to help guide decisions. This could be a nice indicator to have to tell
+ how the market is feeling about new information.
+
+## Project Gallery
+
+<Gallery columns="2" gap="16" marginTop="16" marginBottom="16">
+  <Media src="/images/projects/ml4t/Experiment 1 In-Sample Trading (JPM).png" alt="Manual vs. Strategy Learner vs. benchmark Performance" aspectRatio="16/9" radius="l" />
+  <Media src="/images/projects/ml4t/Experiment 1 Out-of-Sample Trading (JPM).png" alt="Market Impact Experiment Results" aspectRatio="16/9" radius="l" />
+</Gallery>
