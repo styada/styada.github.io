@@ -3,6 +3,7 @@ import { Logo } from "@once-ui-system/core";
 const person = {
   firstName: "Sai Suchir",
   lastName: "Tyada",
+  nickName: "Sai",
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
@@ -15,11 +16,10 @@ const person = {
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
+  title: <>Subscribe to {person.nickName}'s Newsletter</>,
   description: (
     <>
-      I occasionally write about design, technology, and share thoughts on the intersection of
-      creativity and engineering.
+      I like to write about my thoughts on AI, tech, and my travels.
     </>
   ),
 };
@@ -306,7 +306,7 @@ const about = {
 const blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Some stuff I've wanted to write about",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
