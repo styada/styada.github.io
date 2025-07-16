@@ -326,47 +326,71 @@ const gallery = {
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
   description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
   images: [
     {
-      src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
+      src: "/images/gallery/dji_fly_20240424_195230_38_1714006379039_photo_optimized.jpg",
+      alt: "Minneapolis skyline",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
+      src: "/images/gallery/IMG_4550.JPG",
+      alt: "Chasing sunset",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
+      src: "/images/gallery/IMG_6723.jpg",
+      alt: "Roman Cathedral",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
+      src: "/images/gallery/IMG_6854.jpg",
+      alt: "Roman Sunset",
+      orientation: "horizontal",
+    },
+        {
+      src: "/images/gallery/IMG_8767.jpg",
+      alt: "Japanese Sunset",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/IMG_9228.jpg",
+      alt: "Fukuoka, Japan",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
+      src: "/images/gallery/dji_fly_20240428_175102_58_1714344712406_photo_optimized.jpg",
+      alt: "Ethereal Plains",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/IMG_6756.jpg",
+      alt: "Japanese Garden",
+      orientation: "vertical",
+    },
+
+    {
+      src: "/images/gallery/IMG_6570.jpg",
+      alt: "Kendrick Lamar in Minneapolis",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
+      src: "/images/gallery/IMG_7339.jpg",
+      alt: "South Beach Cuisine",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/IMG_3992.jpg",
+      alt: "Indian Peaks",
+      orientation: "horizontal",
+    },
+    {
+      src: "/images/gallery/IMG_8961.jpg",
+      alt: "Kyoto, Japan",
+      orientation: "vertical",
+    },
+    {
+      src: "/images/gallery/IMG_9811.jpg",
+      alt: "Milky Way over Park Rapids, MN",
       orientation: "vertical",
     },
   ],
