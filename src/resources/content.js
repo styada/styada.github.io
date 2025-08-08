@@ -98,22 +98,26 @@ const about = {
     institutions: [
       {
         name: "Georgia Institute of Technology",
+        image: "/images/education/gatech.png",
         description: <>
           <>Masters of Science in Computer Science</>
-          <>Interactive Intelligence Specialization</>
+          <> - Artificial Intelligence Specialization</>
         </> ,
       },
       {
         name: "University of Minnesota - Twin Cities",
+        image: "/images/education/umn.png",
         description: <>Bachelors of Arts in Mathematics</>,
       },
       {
         name: "Oxford University",
+        image: "/images/education/oxford.png",
         description: <>Artificial Intelligence Programme</>,
       },
       {
         name: "University of Minnesota - Twin Cities",
-        description: <>Bachelors of Science in Computer Science - AI Track</>,
+        image: "/images/education/umn.png",
+        description: <>Bachelors of Science in Computer Science - Artificial Intelligence Specialization</>,
       },
     ],
   },
@@ -123,6 +127,7 @@ const about = {
     experiences: [
       {
       company: "Target",
+      image: "/images/companies/target.png",
       timeframe: "Oct 2024 - Present",
       role: "Applied AI Engineer / Software Engineer - Generative AI",
       achievements: [
@@ -143,6 +148,7 @@ const about = {
     },
     {
       company: "Target",
+      image: "/images/companies/target.png",
       timeframe: "Sep 2023 - Oct 2024",
       role: "TLP Engineer",
       achievements: [
@@ -173,6 +179,7 @@ const about = {
     },
     {
       company: "Best Buy",
+      image: "/images/companies/bestbuy.png",
       timeframe: "Sep 2022 - May 2023",
       role: "Software Engineer Intern",
       achievements: [
@@ -187,6 +194,7 @@ const about = {
     },
     {
       company: "Target",
+      image: "/images/companies/target.png",
       timeframe: "Jun 2022 - Aug 2022",
       role: "Software Development Intern – Infrastructure",
       achievements: [
@@ -204,6 +212,7 @@ const about = {
     },
     {
       company: "Best Buy Health",
+      image: "/images/companies/best_buy_health.png",
       timeframe: "Sep 2021 - May 2022",
       role: "Software Development Intern – CRM",
       achievements: [
@@ -215,6 +224,7 @@ const about = {
     },
     {
       company: "Target",
+      image: "/images/companies/target.png",
       timeframe: "Jun 2021 - Aug 2021",
       role: "Back-End Software Development Intern",
       achievements: [
@@ -229,6 +239,7 @@ const about = {
     },
     {
       company: "The Toro Company",
+      image: "/images/companies/toro.png",
       timeframe: "Jun 2020 - Aug 2020",
       role: "Inventory Analyst Intern",
       achievements: [
@@ -246,6 +257,7 @@ const about = {
     },
     {
       company: "Optum",
+      image: "/images/companies/optum.png",
       timeframe: "Aug 2018 - Jun 2019",
       role: "Full-Stack Software Development Intern",
       achievements: [

@@ -246,9 +246,16 @@ export default function About() {
                 <Column fillWidth gap="l" marginBottom="40">
                   {about.studies.institutions.map((institution, index) => (
                     <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                      <Text id={institution.name} variant="heading-strong-l">
-                        {institution.name}
-                      </Text>
+                      <Flex vertical="center" gap="8">
+                        <Avatar
+                          src={institution.image}
+                          size="s"
+                          style={{ minWidth: 32, minHeight: 32, borderRadius: "50%", objectFit: "cover" }}
+                        />
+                        <Text id={institution.name} variant="heading-strong-l">
+                          {institution.name}
+                        </Text>
+                      </Flex>
                       <Text variant="heading-default-xs" onBackground="neutral-weak">
                         {institution.description}
                       </Text>
@@ -267,9 +274,19 @@ export default function About() {
                   {about.work.experiences.map((experience, index) => (
                     <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
                       <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
-                        <Text id={experience.company} variant="heading-strong-l">
-                          {experience.company}
-                        </Text>
+                        <Flex vertical="center" gap="8">
+                          {/* Inline logo for company, fallback to nothing if not provided */}
+                          {experience.image && (
+                            <Avatar
+                              src={experience.image}
+                              size="s"
+                              style={{ minWidth: 32, minHeight: 32, borderRadius: "50%", objectFit: "cover" }}
+                            />
+                          )}
+                          <Text id={experience.company} variant="heading-strong-l">
+                            {experience.company}
+                          </Text>
+                        </Flex>
                         <Text variant="heading-default-xs" onBackground="neutral-weak">
                           {experience.timeframe}
                         </Text>

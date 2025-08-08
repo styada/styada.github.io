@@ -1,0 +1,136 @@
+---
+title: "Building a Rule-Based ARC-AGI Agent"
+summary: "Designing a modular reasoning system to tackle ARC benchmark tasks using transformations, segmentation, and heuristic learning."
+publishedAt: "2025-04-27"
+images: 
+    - "/images/projects/arcagi/arc_agi_logo.png"
+tags: ["Artificial General Intelligence", "Rule-Based Systems", "Computer Vision", "Python", "Project Showcase"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Overview
+
+The Abstraction and Reasoning Corpus (ARC) benchmark was proposed by François Chollet (Google Deepmind and creator of Keras) in 2019. 
+The benchmark is built not as a concrete but more a suggestion of the concept underlying that unless AI (or whatever model we reference
+to as AI) can solve novel unseen and untrained upon problems with minimal to no examples, we cannot say that Artificial General Intelligence
+(AGI) has been achieved. 
+
+The benchmark is built to test reasoning in its most distilled form. Each task presents a small set of colored grids.
+Some are paired as examples of an input transformed into an output, others are left for the solver to complete
+without guidance. Despite the minimal format, the challenges require pattern recognition, spatial reasoning, and abstraction all
+at once. It’s the kind of puzzle that 5-year-old humans can solve visually and intuitively through pattern matching,
+but for a machine it demands careful engineering to make it approachable .
+
+For my Knowledge-Based AI course at Georgia Tech, I designed a rudimentary agent with basic heuristics that could interpret these problems
+through a modular reasoning pipeline. It processes each task by breaking down the grid into identifiable structures, 
+testing a library of transformations, and using its accumulated successes during the "training" examples to guide its choices on unseen case(s).
+The goal was to make a system that could adapt within the constraints of rule-based logic, operating on principles that could be traced and understood.
+
+You can try one of the daily examples from the official website here: https://arcprize.org/play 
+
+Here is an example I screen-shotted where we can see 2 "training" examples of some pattern and the unseen case that needs to be solved.
+<img
+  src="/images/projects/arcagi/example_arc_problem.png"
+  alt="Example problem from the official Arc Agi website"
+  style={{ width: '100%', borderRadius: '12px', marginBottom: '16px' }}
+/>
+
+## Designing the Agent
+
+Each problem begins with an analysis of the training examples. The agent parses the grids to identify shapes, detect boundaries, 
+assess color distributions, and note the spatial arrangement of objects. This creates a working profile of the task that guides 
+its approach. Transformations in its library include geometric changes like rotation and reflection, logical operations such as 
+XOR or masking, and operations on individual objects like duplication or recoloring.
+
+These transformations are applied in two stages. First, the agent tests them on the entire grid, looking for easy and lazy matches to the 
+training outputs. Then, it uses object detection libraries to segment the grid into connected components and re-run the same transformations on each piece 
+independently. This dual-step search, whole-grid and object-focused, covers both global transformations and cases where separate parts 
+of the grid follow different rules and results in solving 61/96 problems.
+
+Each transformation that produces a correct match is recorded. Over the course of the problem, the agent builds a ranked list 
+of strategies weighted by their frequency of success. This ranking is then used during inference to select the transformations 
+most likely to solve the test case. Multiple outputs can be generated in this stage to account for uncertainty. We then select the
+prediction with the highest probability of success of matching with the training outputs.
+
+## Results and Observations
+
+The agent was tested on 96 ARC problems divided across three stages. In Milestone B, where training and test cases 
+share strong similarities, it solved 15/16 tasks. Milestone C introduced more abstract variations, with 12/16
+ solved. Milestone D contained the most complex tasks—often requiring multi-step reasoning or manipulation of nested 
+structures—and the agent succeeded in 6/16.
+
+Several solutions illustrate the agent’s strengths. In one problem, it segmented the grid, applied a diagonal extension 
+heuristic, and mapped colors based on patterns learned from the examples.
+<img
+  src="/images/projects/arcagi/tail_extension.png"
+  alt="Tail extension heuristic applied to segmented objects"
+  style={{ width: '100%', borderRadius: '12px', marginBottom: '16px' }}
+/>
+
+In another, it detected hollow shapes, filled them using a frequency-based color choice, and preserved the surrounding frames.
+
+<img
+  src="/images/projects/arcagi/enclose_and_fill.png"
+  alt="Enclosure detection and fill process"
+  style={{ width: '100%', borderRadius: '12px', marginBottom: '16px' }}
+/>
+
+
+ In another, it identified a divider in the grid, split it into sections, applied a bitwise operation, and remapped the colors
+to match the expected output based on color frequencies.
+<img
+  src="/images/projects/arcagi/split_grid.png"
+  alt="Logical operation between split grid sections"
+  style={{ width: '100%', borderRadius: '12px' }}
+/>
+
+ Each case showed the value of combining segmentation, transformation, and heuristic ranking. 
+
+## Challenges
+
+Ambiguous color mappings were one of the most consistent sources of error. When the relationship between input and output colors 
+shifted based on context, the current mapping logic often misinterpreted the transformation. Nested hollow shapes also posed 
+difficulties for enclosure detection, sometimes resulting in incorrect fills. Another limitation was the agent’s commitment to 
+its ranked list of transformations once it moved into inference. If an approach was unlikely to work, the system had no mechanism 
+to re-evaluate and adjust mid-task.
+
+These challenges were most pronounced in the Milestone D set, where the problems often required reasoning steps that fell outside 
+the transformations the agent had learned to prioritize. In this step, one thing I realized was that the order of transformations
+matters just as much if not the most to the chaining of transformations. This ended up being a heuristic I was unable to solve and
+the sole location where I relied on a somewhat semi-brute force approach.
+
+## Future Work
+
+Further development would focus on refining the color inference to handle ambiguity instead of frequency, improving enclosure detection for more complex 
+spatial structures, and adding a meta-reasoning process/heuristic that allows the agent to shift strategies when initial attempts fail in a smarter search for solutions. 
+These additions would give it more flexibility in handling the kinds of abstract, multi-layered tasks that are still out of reach.
+
+I would also want to focus on creating an appropriately complex transformation chaining heuristic that utilizes some notion of a distance
+function to make the agent more flexible and smarter in terms of not wasting time on transformation chains that will yield no proper result.
+One such idea I did not have the time to implement was a markov chain and/or a bidirectional graph based approach to keep track of transformations
+and reduce the search space as much as possible by working backwards from the output to the input. I hypothesize that this approach will take
+fewer and smarter steps towards the solution.
+
+While this implementation stops short of human-level adaptability, it demonstrates that a rudimentary, modular, and interpretable reasoning system 
+can achieve meaningful progress on a benchmark as challenging as ARC. The process of building it also reinforced how much of 
+problem solving comes from balancing consistent structure with the ability to adjust when the structure no longer applies.
+
+
+## Read or Download My Detailed Project Report
+
+- [**View/Download PDF**](/documents/Arc_Agi_Report.pdf)
+
+<iframe
+  src="/documents/Arc_Agi_Report.pdf"
+  width="100%"
+  height="650"
+  style={{
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    marginTop: "1rem"
+  }}
+  title="ARC AGI Report PDF Viewer"
+/>
