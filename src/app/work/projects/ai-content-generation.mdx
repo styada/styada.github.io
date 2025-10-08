@@ -1,0 +1,176 @@
+---
+title: "Building an AI-Powered Content Generation System"
+summary: "I developed an automated system that writes, narrates, and visualizes stories using AI - exploring the future of creative content generation."
+publishedAt: "2025-10-08"
+images:
+    - "/images/projects/project-01/blogs/story_generation.png"
+    - "/images/projects/project-01/blogs/sequence_diagram.png"
+tags: ["Artificial Intelligence", "Content Generation", "FastAPI", "LLMs", "Video Production"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Motivation
+As humans we have a millenia old tradition of passing down stories and information orally. This is fact and there are several documentaries on this on the History channels.
+Stories provide an escape for humans into an imaginitive reality without our worldly limitations. They provide lessons on morals (The Boy Who Cried Wolf for example) 
+as well as just simple entertainment (horror stories around the campfire).
+
+But stories are only as widely ranged as the imagination of the person who is telling them. I for one would like to say I am imaginative, but in reality imagination comes
+hard to me as a person whose brain is hardwired for logic and numbers. 
+
+So when I recently was tasked with telling bed time stories to younger cousins of mine who insisted on not reading the same story book for the 24th time, my mind drew blanks.
+I ended up asking the good 'ole ChatGPT for inspiration on topics to stitch together a story.
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_z6gi4hz6gi4hz6gi.png"
+  alt="Storytelling"
+  width="600"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+
+The thought then came to my mind that people of all ages enjoy stories, and I'm 100% sure that someone somewhere has been in my exact shoes struggling to come up with a story
+entertaining enough to occupy young minds while also being logically sound enough to answer all the curious questions that their brains can come up with. 
+These people could and would appreciate a little inspiration augmentation to help them after a long days work.
+
+This became the basis for my project and the pain point based on which I built my tool.
+
+## The Technical Motivation
+
+While tools like ChatGPT, Gemini, Claude, etc. excel at writing and Stable Diffusion (and some MLLMs) at creating images, I wondered, could we build a system that brings these capabilities together to tell complete stories?
+Not just text, but fully produced videos that entice, engage, and entertain viewers.
+
+We see it all the time nowadays as our society worldwide moves towards short form media consumption patterns, that story telling has been introduced in various forms.
+Primarily in the form of captions over video for an outlandish yet realistic story with jaw dropping plot twists that have the reader/listener/viewer on the edge of their seat.
+So I set about looking at tools that may allow me to do the same.
+
+But, while there exist a plethora of tools out there to generate content (tools I will not name), I was unsatisfied by how many of them require a paid subscription to access them.
+I don't want to have to pay money everytime I want to tell/show my cousins a bed time story, neither do I subscribe to the idea that everything needs to be paid (at which point I
+can just use Netflix or YouTube Kids to put on Blue's Clues or whatever kids these days watch).
+
+In the era of fully free and downloadable local LLM, VLLM, and other models, this added on a second pain point I wanted to tackle.
+So I set about to create something that is open source and free for usage. Since there are no resource costs associated with using the generation workflow, plus as more and more 
+devices get the resources allocated to leverage GenAI models, my solution seems like a decent market fit.
+
+The goal then is to build an intelligent system that understands storytelling principles and can produce content that actually resonates with and provides value to viewers.
+
+## How It Works: The Building Blocks
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_xdiglqxdiglqxdig.png"
+  alt="Building blocks"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+The system works like a creative agency, but with AI agents instead of human teams. At its core is a FastAPI web service that acts as the project manager.
+When someone requests a story, this service creates a unique job ID and coordinates all the steps needed to bring that story to life through the Orchestrator.
+Think of it as an intelligent traffic controller that makes sure every story request flows smoothly through our creative pipeline.
+
+To handle multiple stories at once without getting overwhelmed (you never know which story will be a hit), I used a local Redis instance as the system's task queue.
+This keeps track of which stories are being worked on, what stage they're at, and what needs to happen next. 
+This setup means we can scale up to handle lots of requests without losing track of anything (if scale is what is required).
+
+## The Art of AI Storytelling
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_b7o0xzb7o0xzb7o0.png"
+  alt="An image of cartoon kids sitting on the floor around a wizard in a blue robe and wizard hat reading to the kids a picture book"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+The real magic happens in what I call the story generation worker. We make use of the well-known Llama 3.1 model with 8 billion parameters as this model comes in many flavors
+and is a favorite amongst those who like to use LLMs for creative works. We set the temperature to a warm 0.95 to allow for high creativity.
+
+Every story follows a thoughtful creation process:
+1. First, plan out the key elements (characters, setting, and major plot points)
+2. Then expand each scene with rich details meant to paint a picture in the reader/listeners mind, carefully managing pacing and flow
+3. Finally, run through an AI-powered evaluation check to make sure the story even makes sense. If the story doesn't score at least 8/10, it goes back for revision
+
+Different types of stories require different approaches.
+Reddit-style dramas run longer (1200-1500 words) and need more dramatic gossip-esque tension.
+Children's stories are shorter and simpler (800-1000 words),
+while educational content sit in the middle range (1000-1200 words) focusing more on simplifying complex topics into meaningful analogies.
+Each type gets its own specialized treatment in terms of vocabulary, pacing, and style.
+
+## The AI Writing Team
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_d496i3d496i3d496.png"
+  alt="An image of cartoon kids sitting on the floor around a wizard in a blue robe and wizard hat reading to the kids a picture book"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+One of the most exciting aspects of this project was implementing what I call an "AI writing room".
+Instead of just one AI working alone, I created a team of specialized AI agents that collaborate like a real writing team.
+The main storyteller agent works with a quality analyst agent who provides feedback and suggestions, leading to richer, more polished stories.
+A secondary agent summarizes the story to check if the story arc has been sufficiently fulfilled or if more generation needs to be done for a part 2.
+
+## Bringing Stories to Life
+
+Once we have a story, the next challenge is turning it into an engaging video.
+I built a pipeline that starts with Microsoft's Edge TTS (text-to-speech) to create natural-sounding voiceovers.
+While I am aware that this is certainly not the most advanced TTS system out there, I am limited by my hardware (non-CUDA) from using technologies like Microsoft's 
+recently released VibeVoice and other free options. And I sure was not going to pay other services for TTS tools (*cough* ElevenLabs *cough*)
+I then use the PySRT library get precise timing data for every word saved to a .srt file, which becomes crucial for the next steps.
+
+After the timing data and the voiceovers are ready, we randomly select a video file from a set of videos I thought were cool background videos. Realistically you can use
+any old .mp4 video file based on what is your brand or who the audience is.
+We then set about using the duration of the voiceover to randomly subclip a section of the video file using FFmpeg to use as the actual basis for the end video.
+The video clips are automatically cropped to that perfect 9:16 ratio that works so well on TikTok and Instagram and phones in general using the MoviePy library.
+The last step involves building the composite final video with the original audio replaced with the new voiceover, and the word timings and words paired to overlay
+subtitles onto the video.
+
+All of this happens automatically in a matter of minutes (depending on story length), turning our stories into professional-looking videos that are ready to share.
+
+<img
+  src="/images/projects/project-01/blogs/sequence_diagram.png"
+  alt="A sequence diagram"
+  width="600"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+## Under the Hood
+
+I built the system using modern tools that prioritize performance and reliability:
+- Python 3.12+ as the foundation
+- FastAPI for quick and efficient API building
+- Redis for managing our job queue
+- Ollama for running AI models locally (using Llama 3.1 8B and Mistral 7B)
+- MoviePy and PySRT for video editing and subtitle work
+
+## Real-World Performance
+
+The system has been performing really well in practice. Here's what the timing looks like:
+- Story generation: 2-5 minutes (including quality checks and looping for low-quality stories)
+- Voiceover creation: 30-90 seconds
+- Video production: 1-3 minutes
+
+What's particularly cool is how well it scales. Because of the way it's built with Redis queue management, we can run multiple stories at once across different machines.
+And while you don't need a fancy GPU to run it (I created and ran this system on an M2 Pro Macbook Pro with integrated GPU), having one should make the video processing much faster.
+
+<img
+  src="/images/projects/project-01/blogs/time.png"
+  alt="A gantt diagram"
+  width="600"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+## What's Next
+
+This project has been an interesting exploration of how AI can augment creative work.
+While it's not about replacing human creativity, it shows how AI can help scale content creation in interesting ways and help people come up with stories on the spot.
+
+The technology regarding this project is not really all that advanced nor is it crazy cutting edge. As the improvements of LLMs plateaus, the next few years will be more about
+What can we do with LLMs? more than Can we do this with LLMs?
+
+As AI continues to evolve, the possibilities for creative content generation will only grow more exciting. 
+For next steps I would like to see if I can reduce computational resource reliance by utilizing small language models
+and fine-tune them to allow for a version that can be converted into an app for people to carry on their phones.
+
+As such this fine-tuning efforts is a part of work for the startup I am working on which promises to bring the power of LLMs to small businesses for content generation and market trends analysis purposes.
+
