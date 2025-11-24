@@ -9,6 +9,7 @@ const withMDX = mdx({
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
+  outputFileTracingRoot: "/Users/saityada/Desktop/coding/styada.github.io",
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],

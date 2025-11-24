@@ -17,9 +17,11 @@ export function Posts({
 }: PostsProps) {
     let allBlogs = getPosts(['src', 'app', 'blog', 'posts']);
 
-    const sortedBlogs = allBlogs.sort((a, b) => {
-        return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
-    });
+    const sortedBlogs = allBlogs
+        .filter(blog => blog.metadata.publishedAt)
+        .sort((a, b) => {
+            return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+        });
 
     const displayedBlogs = range
         ? sortedBlogs.slice(

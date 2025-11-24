@@ -1,0 +1,101 @@
+---
+title: "The Layman's Guide to Generative AI - Chapter 9: Ethics and Concerns in GenAI"
+summary: "The flip side: addressing the ethical dilemmas and risks of generative AI."
+publishedAt: "2025-11-13"
+image: "/images/projects/project-01/blogs/ai_zero_to_hero.png"
+tag: "Generative AI Crash Course"
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+Every powerful technology comes with consequences. Fire warms your home and burns it down. The internet connects you and exposes you. Generative AI can create bedtime stories and can create convincing fake evidence of crimes that never happened.
+
+This isn't a reason to reject the technology. It's a reason to think clearly about it.
+
+## The Misinformation Problem
+
+ChatGPT can write convincing false information. An image generator can create a photo of an event that never occurred. A video generator can put words in someone's mouth they never said. These are not theoretical risks — they're happening now.
+
+The challenge is that generative content *looks* real. A deepfake video looks like a real video. A generated image looks like a real image. Our brains evolved to trust what we see, but our eyes can be fooled by machines trained on millions of examples of real-world imagery.
+
+This has implications for everything from elections (fake videos of candidates) to personal reputation (fake images or videos of individuals) to scientific discourse (fake research papers or data).
+
+The honest truth is that there's no perfect defense. You can add digital signatures and watermarks, but as soon as someone cracks those, the arms race escalates. You can teach media literacy — teaching people to be skeptical of surprising claims — but that's slow and imperfect.
+
+What you *can* do is practice verification. If something extraordinary is claimed online, verify it from multiple independent sources before believing it. Be skeptical of things that confirm your existing beliefs (those are easiest to believe uncritically). Know where information comes from.
+
+## Privacy and Training Data
+
+Here's something most people don't think about: the AI models we're discussing were trained on data. A lot of it. And much of that data came from the internet without explicit permission from the creators.
+
+That book published on Project Gutenberg? Probably in the training data. That article you wrote for your blog? Probably in there. That poem you posted on Twitter? That photo you uploaded to Instagram? They could all be part of the training data for an LLM or image model.
+
+Some of that data includes private information. Names, addresses, email addresses, phone numbers. Researchers have demonstrated that LLMs can sometimes be tricked into reproducing training data, including sensitive information.
+
+There's also a copyright question. If an artist's entire body of work was used to train an image generator, and that generator produces images in the artist's style, is that fair use or copyright infringement? Different jurisdictions are answering this differently right now, and it's unclear.
+
+My perspective: if you're using generative AI tools, be aware of where the training data came from and try to support the original creators when possible. If you're building AI systems, think about data provenance and get consent when you can.
+
+## Job Displacement and Skills
+
+Here's a harder question: if AI can do a job faster and cheaper, what happens to people who do that job?
+
+The history of technology suggests that disruption happens. Photography disrupted portrait painters. Calculators disrupted manual computation. The internet disrupted classified ads, travel agents, and many other jobs. Usually, some roles were lost and new ones emerged, but the transition was painful for individuals and communities.
+
+Generative AI will likely disrupt some jobs, particularly those focused on routine content creation. But it will also create new opportunities. Someone needs to prompt the AI, evaluate its outputs, refine them, and integrate them into larger systems. That's a new skill set.
+
+What's important is not denying the disruption but acknowledging it and preparing. If you're a writer, learning to work with AI might mean thinking of yourself as a creative director — you have the vision, the AI helps execute. If you're a designer, maybe you're more of a curator — guiding AI generation toward your vision. These are different roles, but they exist.
+
+For students learning now, I'd say: learn the fundamentals of your field, but also learn how to work *with* AI tools in that field. Don't compete with the machine on speed; compete on judgment, creativity, and vision.
+
+## Bias and Representation
+
+AI systems inherit biases from their training data. If the training data is biased, the AI will be biased.
+
+Concrete example: an image generator trained mostly on images of white people will generate people who are mostly white when you ask for generic people. A resume-reading AI trained on historical hiring data (which reflected discriminatory patterns) might be biased against women or minorities.
+
+This is important because these biases can cause real harm. A hiring AI that screens out qualified candidates. A lending AI that denies loans to people based on zip code (a proxy for race). A medical AI that performs worse on certain populations because they were underrepresented in training data.
+
+The fix requires effort at multiple levels. Data collection needs to be more diverse and inclusive. Training needs to explicitly surface and measure bias. Evaluation needs to check for disparate impact. Deployment needs oversight.
+
+But here's the thing: this is often harder than the technical problem. Collecting diverse, representative data is hard. Defining what "fairness" means is hard — different stakeholders want different things. Getting organizations to invest in bias mitigation when it slows down deployment is hard.
+
+What I can tell you: if you're using an AI system for something important (hiring, lending, medical decisions), ask about bias testing. Ask how diverse the training data was. Ask what safeguards are in place. Don't assume that because something is generated by AI it's unbiased — it's probably the opposite.
+
+## The Environmental Question
+
+Training large AI models uses a lot of energy. A single training run of a large model can use as much electricity as a hundred homes in a year. That has carbon implications, water implications (data centers use water for cooling), and e-waste implications.
+
+This isn't a reason to reject AI, but it's a reason to be thoughtful about when and how it's used. Small, efficient models trained once are better than large models retrained constantly. Using existing models is better than training new ones. Considering whether you actually need AI for a task, or whether a simpler solution exists, is important.
+
+## The Attention Question
+
+Here's something less discussed but important: generative AI is capturing a huge amount of research attention and funding.
+
+That's not inherently bad. But it means other important problems — disease, poverty, climate — are getting less attention and funding. Research resources are finite. We're in a moment where AI is getting a disproportionate share, and that has opportunity costs.
+
+Again, not an argument against AI research. But an argument for perspective.
+
+## Using These Tools Responsibly
+
+Here's my practical advice for anyone using generative AI:
+
+**Be honest about what you're doing.** If you generate content with AI, disclose it when it matters. Readers/viewers have a right to know.
+
+**Verify important claims.** Don't trust the AI's claims about facts without checking. Especially not for anything high-stakes.
+
+**Consider the source of training data.** If you're building on an open-source model, understand where the data came from. Try to support the original creators.
+
+**Think about bias.** If you're using AI for decisions that affect people, test for disparate impact. Don't blindly trust the algorithm.
+
+**Be skeptical of hype.** Every technology is oversold initially. AI is no exception. The capabilities are real, but so are the limitations.
+
+## The Bigger Picture
+
+Ethics in AI isn't about preventing AI from being used. It's about using it thoughtfully, with awareness of consequences and responsibility for impacts.
+
+The people most equipped to think about these consequences are people like you — people learning about AI, using it, maybe building with it. The more people who think carefully about ethics, the better our collective decisions will be.
+
+In the next chapter, we'll turn more practical. How do you actually *use* these tools? What are the best practices? How do you get started?

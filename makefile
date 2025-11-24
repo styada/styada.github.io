@@ -1,4 +1,4 @@
-.PHONY dev-install
+.PHONY: dev-install dev-start
 
 dev-install:
 	@echo "Installing dependencies..."

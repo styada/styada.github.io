@@ -16,7 +16,7 @@ const person = {
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.nickName}'s Newsletter</>,
+  title: <>Subscribe to {person.nickName}&apos;s Newsletter</>,
   description: (
     <>
       I like to write about my thoughts on AI, tech, and my travels.
@@ -58,7 +58,7 @@ const home = {
   },
   subline: (
     <>
-      Hi I'm Sai!
+      Hi I&apos;m Sai!
       <br /> I am an applied AI engineer at Target, where I work on enabling teams to build
       AI-powered tools. 
       <br />After hours, I travel the world and follow my curiosity.
@@ -87,8 +87,8 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Sai is a Minneapolis-based Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. 
-        His work involves building Target's internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs & MLLMs), and Kafka-based Appplication Monitoring platform. 
+        Sai is a Minneapolis-based Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work.
+        His work involves building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs & MLLMs), and Kafka-based Appplication Monitoring platform. 
       </>
     ),
   },
