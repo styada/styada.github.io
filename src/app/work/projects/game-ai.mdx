@@ -1,0 +1,125 @@
+---
+title: "Video Game AI Pathfinding: From Grids to NavMeshes"
+summary: "I implemented core pathfinding algorithms in Unity using C# to enable AI agents to navigate complex game environments, covering grid lattices, path networks, A* search, and navigation meshes."
+publishedAt: "2025-11-28"
+images:
+    - "/images/projects/project-01/blogs/story_generation.png"
+    - "/images/projects/project-01/blogs/sequence_diagram.png"
+tags: ["Artificial Intelligence", "Pathfinding", "Unity", "C#", "Game Development"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Motivation
+
+Think about the last video game you played. Whether it was a shooter (shoutout Call of Duty!), RPG, or racing game,
+ you probably didn't think much about *how* the NPCs and enemies moved around the world.
+  But I guarantee you noticed if they moved *badly* walking into walls, getting stuck in
+   corners, or taking the most idiotic path possible.
+
+<img
+  src="/images/projects/game-ai/path-finding/Assassins-Creed-Unity-wall-glitch.jpg"
+  alt="NPC Stuck in Wall Assassin's Creed Unity"
+  width="600"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+Here's the thing, pathfinding is critical to game AI. It's what makes a soldier
+convincingly flank you in an fps like Call of Duty (love the game btw), what lets an NPC actually get to their
+destination, what enables a bot to run after you through a difficult topology level without looking like
+an idiot. Get pathfinding wrong, and your game feels broken. Get it right, and players
+won't even think about it. The goal is for it to be so realistic in behaviour that they go unnoticed.
+
+ In my Game Artificial Intelligence class for my masters program at Georgia Tech, 
+ I spent some time to learn how this process is done and how to build these systems from scratch.
+  Starting from incredibly simple lattice grid overlays and eventually building
+  full navigation meshes, each step taught me something new about discretizing space,
+   handling obstacles, and optimizing algorithms so they don't tank your frame rate
+    mid-gameplay.
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_z6gi4hz6gi4hz6gi.png"
+  alt="AI agent navigating a game environment"
+  width="600"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+
+## The Technical Motivation
+
+So here's the problem, game worlds are continuous—infinite space filled with obstacles 
+(think something like the Mario where the level keeps generaing as Mario moves to the right).
+ But computers can't possibly search infinite space, especially the computers they had back then when Mario was made 
+ sometime in the 1900's. You need to *discretize* it into something searchable. Discretization means taking your continuous infinite space and chopping it up into smaller number-able chunks
+  so your computer can actually search through it without losing its mind
+  
+There are multiple ways to do this, grids are simple and intuitive, project a checkerboard like grid onto your game world,
+ mark cells as blocked or free based on if you can have a character access them or not (think walls, obstacles).
+  But they're memory hogs for large worlds and they can look clunky if you're not
+  careful about collision detection. 
+
+Path networks are more flexible, you can manually or
+   algorithmically place nodes and connect them. But, now you're managing edge generation
+    and dealing with complex geometric problems. Nevertheless, the ability to apply quickly well-established 
+    pathfinding algorithms is extremely useful.
+
+A* search is the golden standard for
+     pathfinding, but it only works if your heuristic is admissible, and if you mess that
+      up, you're finding suboptimal paths. And navigation meshes? They're gorgeous and
+       efficient, but generating them correctly is legitimately hard.
+
+I couldn't just pick one and be done. The whole point of the class was to understand
+ *all* of these approaches and know when to use each one. So I built them. One by one.
+  In Unity using C#, wrestling with geometric computations, priority queues, and
+   the constant battle to keep the search algorithm fast enough that players don't
+    experience stuttering.
+
+It was messy. It was educational. It was exactly what I needed.
+
+
+## How It Works: The Building Blocks
+
+I built a comprehensive pathfinding toolkit that could handle most any basic game environment.
+ The system starts by discretizing the continuous game world. Whether through a simple grid overlay,
+  a flexible path network of nodes and edges, or a sophisticated navigation mesh of convex polygons.
+   Obstacles are expanded by the agent's radius to ensure safe navigation, and traversability
+    is checked geometrically to avoid collisions.
+
+At its core the solution is an incremental A* search algorithm,
+ optimized for real-time performance. It uses admissible heuristics (like Euclidean or Manhattan distance)
+  to guide the search efficiently, guaranteeing optimal paths when possible.
+   If a goal is unreachable, it gracefully finds the closest navigable point.
+    The search runs in chunks to prevent frame drops, using priority queues to always explore the
+     most promising nodes first.
+
+This integrated approach allows agents to navigate seamlessly: from grid-based movement in simple levels
+ to navmesh-powered exploration in complex, open worlds. It's the kind of system that powers NPC behavior
+  in games like The Legend of Zelda or modern shooters—unseen but essential for immersive gameplay.
+
+<img
+  src="/images/projects/project-01/blogs/Gemini_Generated_Image_xdiglqxdiglqxdig.png"
+  alt="Integrated pathfinding system overview"
+  width="500"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+
+## What I Learned & Why It Matters
+
+This project crystallized a lesson that transcends game development: **theory meets ruthless reality at the performance boundary.** 
+
+You learn A* in algorithms class as this elegant, provably-optimal search method. Clean. Beautiful. Then you implement it in a game engine targeting 60 FPS and realize: *I need this to complete in 16 milliseconds or the frame drops and the player notices.* The math doesn't change, but the constraints do. This forced me to think deeply about algorithmic complexity, cache locality, and incremental computation—not just correctness.
+
+**Algorithmic Design Under Constraints:** Each pathfinding approach represented a deliberate trade-off. Grids are O(V + E) with simple heuristics but consume memory proportional to world size. Path networks are sparse but require careful edge generation to avoid collisions. NavMeshes scale beautifully but their generation is geometrically complex. Building all four taught me that the "best" algorithm depends entirely on your constraints—memory, latency, world complexity, and what you can afford to precompute.
+
+**Geometric Problem-Solving at Scale:** Collision detection, line-segment intersections, polygon decomposition, convex hull computation—these aren't textbook exercises when you're building real systems. I had to implement robust algorithms that handled floating-point precision issues, edge cases with concave obstacles, and bidirectional edge consistency. One off-by-one error in a portal calculation breaks the entire navmesh. This taught me the discipline of defensive coding and the value of systematic testing.
+
+**Architectural Modularity:** I designed the system so that agents could seamlessly switch between grid, network, or mesh-based navigation depending on the environment. This required clean abstraction layers and a unified interface for the search algorithm. This modular approach meant I could unit test each discretization method independently, benchmark performance in isolation, and iterate on improvements without affecting the rest of the system.
+
+**Real-World Trade-offs:** The final implementation isn't theoretically optimal—it's *practically* sound. It handles unreachable goals gracefully instead of hanging. It runs incrementally to prevent stuttering. It uses heuristics tuned for the specific game environment rather than pursuing mathematical perfection. This pragmatism is exactly what separates toy projects from production systems.
+
+Beyond the technical skills, this project reinforced something fundamental: classical algorithms remain foundational because they're *correct*. In an industry chasing the latest frontier models and cutting-edge architectures, proven techniques like A* and spatial discretization do the unglamorous work that makes systems actually usable. That's the kind of systems thinking FAANG teams value—knowing when to use a classical algorithm, how to optimize it for your constraints, and recognizing that the problem matters more than the flashiness of the solution.
+
+
