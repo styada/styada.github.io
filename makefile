@@ -1,9 +1,7 @@
-.PHONY dev-install
-
-dev-install:
+install:
 	@echo "Installing dependencies..."
 	npm install
 
-dev-start:
+start:
 	@echo "Starting the development server..."
 	npm run dev
