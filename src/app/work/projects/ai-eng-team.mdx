@@ -189,7 +189,24 @@ Building this was a crash course in async systems and agent coordination. A few 
 
 - **No persistent state between runs.** SQLite helps, but agent conversational state and in-memory event bus subscriptions are lost on restart. A full state snapshot/restore mechanism (partially implemented via `pickle`) helps but isn't bulletproof yet.
 
-## What's Next
+## From Simulation to Launchpad
+
+Honestly? This is the part I'm most excited about. I have a graveyard of side projects and startup ideas — probably 70% of what I start never sees the light of day. The pattern is always the same: a flash of inspiration, a weekend of coding, then real life hits and the momentum dies before the thing is actually shippable.
+
+The AI Engineering Team changes that calculus. What if instead of _"I need to find 10 consecutive free hours to build this"_ the equation becomes _"I can describe the idea to my team over coffee and they start shipping while I'm at my day job"?_
+
+That's the vision. The `opencode` integration already proves the agents can write real code. The event bus and orchestrator already give them structure. The ceremonies already keep them accountable. What's missing is turning this from a simulation into a **harness** — a system where you drop in a vision, a repo, and a set of requirements, and the team autonomously builds, tests, and deploys the first shippable version while you review progress asynchronously.
+
+The Hermes angle makes this even more interesting. Hermes is designed to be an AI-first development platform. Pairing it with this agent orchestration layer means the team doesn't just write code — they can provision infrastructure, manage deployments, iterate on feedback, and handle the entire lifecycle from `git init` to `ship it`. The sprint ceremonies become your async standup with a workforce that doesn't sleep, doesn't context-switch, and doesn't lose track of where it left off.
+
+Concretely, here's what I want this to become:
+
+1. **Drop in an idea.** Type `vision: build a SaaS that does X, repo: github.com/me/project` into the SVP command box.
+2. **The team takes over.** The PM generates stories, the engineers start coding, the EM tracks progress. You get a live dashboard showing exactly what's happening.
+3. **You steer, not build.** Skip the grooming ceremony? The team keeps going. Want to pivot a feature mid-sprint? Type a command. The agents adjust.
+4. **Ship on day 5.** By the first demo ceremony — 5 compressed days, about 2.5 hours real time — you have a working prototype ready for feedback.
+
+The graveyard doesn't have to be the default. Most projects die not because the idea was bad, but because the window of motivation closed before the thing was real. An always-on team of AI agents that turns a vision into shippable code within hours turns that problem on its head. You don't need to find the time. You just need to point.
 
 There's a lot of room to make this more realistic and production-ready:
 
