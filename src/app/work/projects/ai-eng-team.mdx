@@ -127,6 +127,15 @@ This is the part that makes it more than just a chatbot demo. When the team is a
 
 When a task is assigned, the engineer agent calls `opencode run "<task>" --model <model>` as a subprocess. The `opencode` CLI handles the actual LLM-powered coding — generating, editing, and testing code changes — and the agent wraps that in the team's workflow with commit messages, PR descriptions, and work log entries.
 
+All of this runs through free open-source models via opencode, keeping the entire system zero-cost to operate:
+
+<img
+  src="/images/projects/ai-eng-team/behind_the_scenes_opencode_free_models.png"
+  alt="Behind the scenes: opencode routing LLM calls through free models"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
 Here are some captures of the engineer agents actively working through their assigned tasks:
 
 <img
