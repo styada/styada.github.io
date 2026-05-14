@@ -3,7 +3,11 @@ title: "Building an AI Engineering Team Simulation"
 summary: "I built a real-time simulation of a 9-person AI engineering organization — complete with agile ceremonies, a Kanban board, and agents that write actual code via opencode."
 publishedAt: "2025-05-14"
 images:
-    - "/images/projects/ai-eng-team/dashboard.png"
+    - "/images/projects/ai-eng-team/dashboard-ui.png"
+    - "/images/projects/ai-eng-team/sprint-ceremonies.png"
+    - "/images/projects/ai-eng-team/mvp_phase1_dashboard.png"
+    - "/images/projects/ai-eng-team/UI.png"
+    - "/images/projects/ai-eng-team/Engineer_Working.png"
 tags: ["Python", "FastAPI", "AI Agents", "Agile", "WebSocket", "OpenCode", "Project Showcase"]
 team:
   - name: "Sai Suchir Tyada"
@@ -27,9 +31,12 @@ The entire system is a single Python application built on **FastAPI** with three
 - **Agent Orchestrator** — The brain of the operation. It initializes all 9 agents, manages their lifecycle, and routes events through an async in-memory pub/sub event bus.
 - **SQLite + SQLAlchemy** — All persistent state (members, projects, sprints, tasks, ceremonies, decisions, messages, work logs) lives in a SQLite database, making it zero-config and portable.
 
-<Grid columns="1" gap="24" marginTop="16" marginBottom="16">
-  <Media src="/images/projects/ai-eng-team/dashboard.png" alt="AI Engineering Team Dashboard" aspectRatio="16/9" radius="l" />
-</Grid>
+<img
+  src="/images/projects/ai-eng-team/dashboard-ui.png"
+  alt="AI Engineering Team Dashboard"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
 
 ## Agent Roles & Hierarchy
 
@@ -46,19 +53,21 @@ The team is modeled after a real engineering org with 9 distinct roles, each wit
 
 Each agent has access to the shared event bus and database, but they can only act within their role's scope. Engineers write code. The PM generates user stories and populates the backlog. The EM facilitates ceremonies. The Director connects strategy to execution. And the SVP — that's you — sets the vision, assigns tasks, and can delegate work directly through the dashboard command box.
 
-## Agile Ceremonies with Time Compression
+Here you can see the principal engineer and the product manager agent in action, each operating within their domain:
 
-One of the most interesting design decisions was **time compression**. Running a full 10-day sprint in real time would take — well, 10 days. Instead, the system compresses time so that **1 agent-day equals 30 minutes of real time**. A full sprint completes in about 5 hours.
+<img
+  src="/images/projects/ai-eng-team/principal_engineer_working.png"
+  alt="Principal Engineer agent working through its task pipeline"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
 
-Ceremonies fire automatically based on elapsed compressed time:
-
-- **Planning** (Day 0) — The PM pulls stories from the backlog, and the team commits to a sprint goal.
-- **Daily Standup** (Every agent-day) — Each team member reports what they're working on, what's blocked, and what they completed.
-- **Backlog Grooming** (Day 5) — Mid-sprint refinement. Tasks without acceptance criteria get flagged, and estimates are re-evaluated.
-- **Demo** (Day 9) — The team shows off completed work.
-- **Retrospective** (Day 9) — What went well, what didn't, and what to change next sprint.
-
-You can also trigger any ceremony on demand — just type `standup` or `demo` in the SVP command box and the whole team responds in real time over WebSocket.
+<img
+  src="/images/projects/ai-eng-team/produt_manager_agent_working.png"
+  alt="Product Manager agent generating user stories and prioritization"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
 
 ## The Orchestrator & Event Bus
 
@@ -75,17 +84,71 @@ When you send a command like `"start sprint: Build the login flow"`, here's what
 
 Every message, task update, ceremony completion, and decision flows through this event-driven pipeline. It keeps the system decoupled — agents don't talk to each other directly; they publish events and react to them.
 
+The product manager agent handles story descriptions and prioritization, feeding the orchestration layer with structured backlog items:
+
+<img
+  src="/images/projects/ai-eng-team/Story_description_and_prioritization1.png"
+  alt="Story description and prioritization by PM agent"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+<img
+  src="/images/projects/ai-eng-team/Story_description_and_prioritization2.png"
+  alt="Continued story prioritization flow"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+## Agile Ceremonies with Time Compression
+
+One of the most interesting design decisions was **time compression**. Running a full 10-day sprint in real time would take — well, 10 days. Instead, the system compresses time so that **1 agent-day equals 30 minutes of real time**. A full sprint completes in about 5 hours.
+
+Ceremonies fire automatically based on elapsed compressed time:
+
+- **Planning** (Day 0) — The PM pulls stories from the backlog, and the team commits to a sprint goal.
+- **Daily Standup** (Every agent-day) — Each team member reports what they're working on, what's blocked, and what they completed.
+- **Backlog Grooming** (Day 5) — Mid-sprint refinement. Tasks without acceptance criteria get flagged, and estimates are re-evaluated.
+- **Demo** (Day 9) — The team shows off completed work.
+- **Retrospective** (Day 9) — What went well, what didn't, and what to change next sprint.
+
+<img
+  src="/images/projects/ai-eng-team/sprint-ceremonies.png"
+  alt="Sprint ceremonies tracking — planning, standup, demo, retro"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+You can also trigger any ceremony on demand — just type `standup` or `demo` in the SVP command box and the whole team responds in real time over WebSocket.
+
 ## Real Coding via opencode
 
 This is the part that makes it more than just a chatbot demo. When the team is assigned a target repository (via `set repo <url>` or the `/api/set-repo` endpoint), each engineer gets their own cloned copy of the codebase in a role-specific working directory.
 
 When a task is assigned, the engineer agent calls `opencode run "<task>" --model <model>` as a subprocess. The `opencode` CLI handles the actual LLM-powered coding — generating, editing, and testing code changes — and the agent wraps that in the team's workflow with commit messages, PR descriptions, and work log entries.
 
-<Grid columns="1" gap="24" marginTop="16" marginBottom="16">
-  <p style={{ textAlign: 'center', fontSize: '0.9em', color: '#888' }}>
-    The agent workflow: SVP command → Orchestrator → Event Bus → Agent thinks → opencode writes code → Results persisted
-  </p>
-</Grid>
+Here are some captures of the engineer agents actively working through their assigned tasks:
+
+<img
+  src="/images/projects/ai-eng-team/Engineer_Working.png"
+  alt="Engineer agent working on a coding task via opencode"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+<img
+  src="/images/projects/ai-eng-team/Engineer1-working.png"
+  alt="Engineer I agent processing its assigned task"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
+
+<img
+  src="/images/projects/ai-eng-team/engineer1-still-working.png"
+  alt="Engineer I agent continuing work on its task"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
 
 ## The Dashboard
 
@@ -97,6 +160,13 @@ The dashboard is a single-page HTML application (no build step, just vanilla JS 
 - **Ceremony Log** — Every standup, planning session, demo, and retro with full transcripts
 - **Decisions** — A running log of architectural and project decisions made by the team
 - **SVP Command Box** — Type natural language commands to interact with the team
+
+<img
+  src="/images/projects/ai-eng-team/UI.png"
+  alt="Full UI view of the AI Engineering Team dashboard"
+  width="100%"
+  style={{ borderRadius: "8px", margin: "1rem 0" }}
+/>
 
 ## Challenges & Learnings
 
