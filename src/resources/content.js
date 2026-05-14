@@ -51,11 +51,11 @@ const home = {
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing the work and projects of ${person.name}.`,
   headline: <>Augmenting life with AI and curiosity</>,
-  featured: {
-    display: true,
-    title: <>Recent project: <strong className="ml-4">Computerized Reconstruction of Tomographic Images</strong></>,
-    href: "work/computerized-reconstruction-tomography/",
-  },
+featured: {
+     display: true,
+     title: <>Recent project: <strong className="ml-4">Building an AI Engineering Team Simulation</strong></>,
+     href: "work/ai-eng-team/",
+   },
   subline: (
     <>
       Hi I'm Sai!
