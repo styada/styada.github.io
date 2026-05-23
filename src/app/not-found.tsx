@@ -1,5 +1,7 @@
 import { Column, Heading, Text } from "@once-ui-system/core";
 
+export const dynamic = 'force-dynamic';
+
 export default function NotFound() {
   return (
     <Column as="section" fill center paddingBottom="160">

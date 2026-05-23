@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
 import { Mailchimp } from "@/components";
 import { Posts } from "@/components/blog/Posts";

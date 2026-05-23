@@ -47,8 +47,8 @@ export const Header = () => {
 
   return (
     <>
-      <Fade hide="s" fillWidth position="fixed" height="80" zIndex={9} />
-      <Fade show="s" fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9} />
+      <Fade s={{ hide: true }} fillWidth position="fixed" height="80" zIndex={9} />
+      <Fade className="flex-hide s-flex-show" fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9} />
       <Flex
         fitHeight
         position="unset"
@@ -61,7 +61,7 @@ export const Header = () => {
         data-border="rounded"
       >
         <Flex paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Flex hide="s">{person.location}</Flex>}
+          {display.location && <Flex s={{ hide: true }}>{person.location}</Flex>}
         </Flex>
         <Flex fillWidth horizontal="center">
           <Flex
@@ -78,78 +78,42 @@ export const Header = () => {
                 <ToggleButton 
                   prefixIcon="home"
                   href="/"
-                  label={home.label}
+                  label={<span className="s-label-hide">{home.label}</span>}
                   selected={pathname === "/"} 
                 />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="person"
-                    href="/about"
-                    label={about.label}
-                    selected={pathname === "/about"}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="person"
-                    href="/about"
-                    selected={pathname === "/about"}
-                  />
-                </>
+                <ToggleButton
+                  prefixIcon="person"
+                  href="/about"
+                  label={<span className="s-label-hide">{about.label}</span>}
+                  selected={pathname === "/about"}
+                />
               )}
               {routes["/work"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="grid"
-                    href="/work"
-                    label={work.label}
-                    selected={pathname.startsWith("/work")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="grid"
-                    href="/work"
-                    selected={pathname.startsWith("/work")}
-                  />
-                </>
+                <ToggleButton
+                  prefixIcon="grid"
+                  href="/work"
+                  label={<span className="s-label-hide">{work.label}</span>}
+                  selected={pathname.startsWith("/work")}
+                />
               )}
               {routes["/blog"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="book"
-                    href="/blog"
-                    label={blog.label}
-                    selected={pathname.startsWith("/blog")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="book"
-                    href="/blog"
-                    selected={pathname.startsWith("/blog")}
-                  />
-                </>
+                <ToggleButton
+                  prefixIcon="book"
+                  href="/blog"
+                  label={<span className="s-label-hide">{blog.label}</span>}
+                  selected={pathname.startsWith("/blog")}
+                />
               )}
               {routes["/gallery"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="gallery"
-                    href="/gallery"
-                    label={gallery.label}
-                    selected={pathname.startsWith("/gallery")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="gallery"
-                    href="/gallery"
-                    selected={pathname.startsWith("/gallery")}
-                  />
-                </>
+                <ToggleButton
+                  prefixIcon="gallery"
+                  href="/gallery"
+                  label={<span className="s-label-hide">{gallery.label}</span>}
+                  selected={pathname.startsWith("/gallery")}
+                />
               )}
               {display.themeSwitcher && (
                 <>
@@ -168,7 +132,7 @@ export const Header = () => {
             textVariant="body-default-s"
             gap="20"
           >
-            <Flex hide="s">{display.time && <TimeDisplay timeZone={person.location} />}</Flex>
+            <Flex s={{ hide: true }}>{display.time && <TimeDisplay timeZone={person.location} />}</Flex>
           </Flex>
         </Flex>
       </Flex>

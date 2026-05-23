@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { notFound } from "next/navigation";
 import { getPosts } from "@/utils/utils";
 import { Meta, Schema, AvatarGroup, Button, Column, Flex, Heading, Media, Text } from "@once-ui-system/core";

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import React from "react";
 
 import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row, Meta, Schema } from "@once-ui-system/core";
@@ -71,7 +72,7 @@ export default function Home() {
         <Projects range={[1, 1]} />
       </RevealFx>
       {routes["/blog"] && (
-        <Flex fillWidth gap="24" mobileDirection="column">
+        <Flex fillWidth gap="24" s={{ direction: "column" }}>
           <Flex flex={1} paddingLeft="l" paddingTop="24">
             <Heading as="h2" variant="display-strong-xs" wrap="balance">
               Latest from the blog

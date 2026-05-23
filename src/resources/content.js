@@ -16,7 +16,7 @@ const person = {
 
 const newsletter = {
   display: true,
-  title: <>Subscribe to {person.nickName}'s Newsletter</>,
+  title: <>Subscribe to {person.nickName}&apos;s Newsletter</>,
   description: (
     <>
       I like to write about my thoughts on AI, tech, and my travels.
@@ -51,14 +51,14 @@ const home = {
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing the work and projects of ${person.name}.`,
   headline: <>Augmenting life with AI and curiosity</>,
-  featured: {
-    display: true,
-    title: <>Recent project: <strong className="ml-4">Computerized Reconstruction of Tomographic Images</strong></>,
-    href: "work/computerized-reconstruction-tomography/",
-  },
+featured: {
+     display: true,
+     title: <>Recent project: <strong className="ml-4">Building an AI Engineering Team Simulation</strong></>,
+     href: "work/ai-eng-team/",
+   },
   subline: (
     <>
-      Hi I'm Sai!
+      Hi I&apos;m Sai!
       <br /> I am an applied AI engineer at Target, where I work on enabling teams to build
       AI-powered tools. 
       <br />After hours, I travel the world and follow my curiosity.
@@ -88,7 +88,7 @@ const about = {
     description: (
       <>
         Sai is a Minneapolis-based Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. 
-        His work involves building Target's internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs & MLLMs), and Kafka-based Appplication Monitoring platform. 
+        His work involves building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs &amp; MLLMs), and Kafka-based Appplication Monitoring platform. 
       </>
     ),
   },
@@ -340,68 +340,63 @@ const gallery = {
   description: `A photo collection by ${person.name}`,
   images: [
     {
-      src: "/images/gallery/dji_fly_20240424_195230_38_1714006379039_photo_optimized.jpg",
+      src: "/images/gallery/dji_fly_20240424_195230_38_1714006379039_photo_optimized.webp",
       alt: "Minneapolis skyline",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/IMG_4550.JPG",
-      alt: "Chasing sunset",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/IMG_6723.jpg",
+      src: "/images/gallery/IMG_6723.webp",
       alt: "Roman Cathedral",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/IMG_6854.jpg",
+      src: "/images/gallery/IMG_6854.webp",
       alt: "Roman Sunset",
       orientation: "horizontal",
     },
         {
-      src: "/images/gallery/IMG_8767.jpg",
+      src: "/images/gallery/IMG_8767.webp",
       alt: "Japanese Sunset",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/IMG_9228.jpg",
+      src: "/images/gallery/IMG_9228.webp",
       alt: "Fukuoka, Japan",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/dji_fly_20240428_175102_58_1714344712406_photo_optimized.jpg",
+      src: "/images/gallery/dji_fly_20240428_175102_58_1714344712406_photo_optimized.webp",
       alt: "Ethereal Plains",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/IMG_6756.jpg",
+      src: "/images/gallery/IMG_6756.webp",
       alt: "Japanese Garden",
       orientation: "vertical",
     },
 
     {
-      src: "/images/gallery/IMG_6570.jpg",
+      src: "/images/gallery/IMG_6570.webp",
       alt: "Kendrick Lamar in Minneapolis",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/IMG_7339.jpg",
+      src: "/images/gallery/IMG_7339.webp",
       alt: "South Beach Cuisine",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/IMG_3992.jpg",
+      src: "/images/gallery/IMG_3992.webp",
       alt: "Indian Peaks",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/IMG_8961.jpg",
+      src: "/images/gallery/IMG_8961.webp",
       alt: "Kyoto, Japan",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/IMG_9811.jpg",
+      src: "/images/gallery/IMG_9811.webp",
       alt: "Milky Way over Park Rapids, MN",
       orientation: "vertical",
     },
