@@ -125,12 +125,12 @@ export default function About() {
             position="fixed"
             paddingLeft="24"
             gap="32"
-            hide="s"
+            s={{ hide: true }}
           >
             <TableOfContents structure={structure} about={about} />
           </Column>
         )}
-        <Flex fillWidth mobileDirection="column" horizontal="center">
+        <Flex fillWidth s={{ direction: "column" }} horizontal="center">
           {about.avatar.display && (
             <Column
               className={styles.avatar}
@@ -273,7 +273,7 @@ export default function About() {
                 <Column fillWidth gap="l" marginBottom="40">
                   {about.work.experiences.map((experience, index) => (
                     <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                      <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
+                      <Flex fillWidth horizontal="between" vertical="end" marginBottom="4">
                         <Flex vertical="center" gap="8">
                           {/* Inline logo for company, fallback to nothing if not provided */}
                           {experience.image && (
