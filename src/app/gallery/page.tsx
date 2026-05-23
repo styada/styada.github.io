@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { Flex, Meta, Schema } from "@once-ui-system/core";
 import MasonryGrid from "@/components/gallery/MasonryGrid";
 import { baseURL, gallery, person } from "@/resources";

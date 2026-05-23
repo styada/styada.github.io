@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import React from "react";
 
 import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row, Meta, Schema } from "@once-ui-system/core";
