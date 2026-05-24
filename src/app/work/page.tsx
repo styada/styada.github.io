@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
