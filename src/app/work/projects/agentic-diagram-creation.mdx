@@ -1,0 +1,70 @@
+---
+title: "Agentic Architecture Diagram Creation"
+summary: "A multi-step LangGraph pipeline that takes natural language descriptions and generates accurate PlantUML architecture diagrams, with a validation layer that checks diagrams against architecture standards before rendering."
+publishedAt: "2026-05-31"
+images:
+    - "/images/projects/project-01/blogs/ai_zero_to_hero.png"
+tags: ["Python", "LangGraph", "PlantUML", "FastAPI", "Redis", "AI Agents", "Developer Tools", "Project Showcase"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Motivation
+
+There is a law in software engineering that nobody officially names but everyone quietly knows: documentation is always the first thing to get stale. The code ships. The sprint closes. The architecture changes. And somewhere in a Confluence page nobody has opened in six months sits a diagram that confidently describes a system that no longer exists.
+
+I felt this most acutely when working on projects with multiple moving parts. The system context diagrams, component diagrams, and sequence flows that were painstakingly created at the start of a project become archaeological artifacts by the third sprint. Updating them means pulling someone away from actual development to relearn a diagramming tool, remember the notation standards, and redo work that should take minutes but somehow always takes an afternoon.
+
+The more I thought about this problem, the more I realized the bottleneck was friction. If producing an accurate architecture diagram were as fast as describing it in plain language, teams might actually keep their documentation current. That idea turned into this project: a multistep agentic pipeline that takes a natural language prompt and produces a validated PlantUML diagram, with a FastAPI layer sitting on top so it can be called from anywhere.
+
+What I wanted to avoid was a glorified autocomplete demo. The interesting design challenge was figuring out what it actually means to generate a *correct* diagram, not just a syntactically parseable one. That question is where the pipeline structure came from.
+
+## The Pipeline Design
+
+The system is built on **LangGraph** and organized as a five node directed pipeline. Each node has one responsibility, and the order is deliberate.
+
+The **Analyzer** takes the raw user prompt and interprets it. Rather than passing the description directly to a code generator, this node extracts the components, the relationships between them, and the type of diagram being requested (system context, component, sequence, or C4 model). This separation matters because the same English sentence can describe very different diagrams depending on the implied level of abstraction. Treating interpretation as its own step gives the rest of the pipeline a structured representation to work from instead of raw text.
+
+The **Generator** receives the Analyzer's output and produces the initial PlantUML code. This node is doing the heaviest LLM work and its output is intentionally treated as a draft rather than a final product.
+
+The **Theme Appender** applies consistent styling. This is a lighter node but it matters for real team use, where visual consistency across diagrams makes documentation feel cohesive rather than piecemeal.
+
+Then comes the node that makes this pipeline different from most diagram generation tools: the **Validator**. Before anything is rendered, the Validator checks the generated PlantUML against a set of criteria. It verifies syntax, checks that relationships are properly labeled, confirms that each component has a meaningful description, and enforces adherence to the relevant standards (C4 model rules being the most exacting of these). If the diagram fails validation, the pipeline does not proceed to rendering.
+
+This is a deliberate choice to put quality enforcement in the middle of the pipeline rather than as an optional postprocessing step. Most tools that generate diagrams from language prompts follow a generate and ship model. They produce output and trust the user to catch problems. Putting validation upstream means the system itself is responsible for the output making architectural sense, not just being parseable.
+
+The **Renderer** is the final node. It takes validated PlantUML and produces the diagram image. Because the PlantUML source is text (and plain text at that), every output is version control friendly by default. You can diff diagram changes the same way you diff code changes, which is a meaningful benefit for teams tracking how their architecture evolves over time.
+
+## Multi-Model and Local Support
+
+One of the more practically important decisions in building this was supporting multiple LLM providers rather than hardcoding to a single API. The pipeline supports **Ollama** for fully local runs, as well as OpenAI, Gemini, Claude, and Grok for cloud based inference.
+
+The local support (via Ollama) is worth calling out specifically because it addresses a real concern for teams working on proprietary systems. If you are generating architecture diagrams for an unreleased product, sending those descriptions to a third party API creates a data exposure surface that some organizations cannot accept. Running the entire pipeline locally removes that concern. The tradeoff is that smaller local models tend to produce noisier PlantUML on the first generation attempt (which makes the Validator even more important as a quality gate when running in offline mode), but for teams with strict data requirements that tradeoff is well worth it.
+
+Having support for multiple providers without needing to change the pipeline code also made the system useful as a testing environment for comparing how different models handle structured code generation tasks. The Analyzer and Generator nodes are doing something qualitatively different from open ended generation: they need to produce output that is syntactically constrained and semantically precise. Not all models handle this equally well, and being able to swap providers without changing the pipeline logic made those comparisons easy to run.
+
+## Scalability Layer
+
+The API layer is built on **FastAPI**, which handles request routing efficiently and makes the `/generate-diagram` endpoint easy to integrate into existing tooling. You send a POST with a prompt and a model selection, and you get back a PNG image of the validated diagram.
+
+Under the hood, **Redis** manages task queuing and state between pipeline steps. This was important for handling concurrent requests without the nodes stepping on each other. Workers running on multiple threads pick up tasks from the queue and run pipeline stages in parallel where the dependency structure allows it, which keeps throughput from collapsing under load.
+
+The whole system runs inside Docker, which simplifies deployment considerably. The combination of Docker for containerization, Redis for concurrency, and FastAPI for the API surface means the service can be stood up in a new environment without manual configuration of dependencies or model state. For a tool that is meant to slot into a development workflow, low deployment friction is not optional.
+
+## Challenges and Learnings
+
+The Validator node was both the most useful part of the system and the hardest to get right. Writing validation rules that catch real diagram errors without being so strict that they reject correct output required a lot of iteration. C4 model validation in particular involved encoding a nontrivial set of structural rules about what belongs at which level of abstraction (a diagram at the component level should not contain system level actors in the same way a context diagram does), and capturing those distinctions in a way the Validator could reason about took several passes.
+
+Prompt engineering for the Generator node was also more nuanced than I expected. PlantUML has a specific syntax and LLMs frequently produce code that is almost right but includes invented directives or incorrect relationship syntax. The initial approach of having the Validator catch these and flag them for correction worked, but it added latency. I ended up spending time on the Generator's prompt to get cleaner initial output, which reduced the number of validation cycles needed before a diagram was accepted.
+
+The Analyzer's role in removing ambiguity from the prompt turned out to be more impactful than I initially gave it credit for. Early versions of the pipeline had the Generator working directly from the user's prompt, and the output quality varied significantly based on how precisely the user phrased their request. Adding the Analyzer as a structured interpretation layer made the Generator more predictable and the Validator's job simpler because it was working with cleaner inputs.
+
+## What's Next
+
+The most immediate thing I want to add is a feedback loop from the Validator back to the Generator. Right now, if a diagram fails validation, the pipeline surfaces the failure but requires a new request to try again. A proper retry loop where the Validator passes its rejection reasoning back to the Generator as context would let the system correct itself within a single request cycle. This is a natural fit for LangGraph's graph based control flow and the infrastructure is mostly already there.
+
+Beyond that, I want to expand the diagram type coverage. The current system handles system context diagrams, component diagrams, sequence diagrams, and C4 model representations well. Container diagrams and deployment diagrams are the obvious next additions, and both would benefit from the Validator's standards enforcement just as much as C4 does.
+
+The direction I find most compelling for the longer term is integrating this with a codebase analysis step. Right now, the Analyzer is interpreting a description written by a human. But if you could point the pipeline at a repository and have it generate the architecture diagram by reading the code directly, you would close the loop on the staleness problem entirely. The diagram would not be documentation of what someone remembered to write down. It would be a rendering of what actually exists. That version of the tool would be something I would actually use every week.

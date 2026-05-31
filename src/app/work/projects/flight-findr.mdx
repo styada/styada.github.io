@@ -1,0 +1,70 @@
+---
+title: "Flight Findr — A Cost-First Travel Agent with a Reasoning Cortex"
+summary: "An agentic travel optimizer that does not just search flights — it reasons about them. Feasibility checks, constraint enforcement, and cost ranking before a single result is shown."
+publishedAt: "2026-05-31"
+images:
+    - "/images/projects/project-01/blogs/ai_zero_to_hero.png"
+tags: ["TypeScript", "Next.js", "AI Agents", "Travel", "Amadeus", "Deterministic AI", "Project Showcase"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Motivation
+
+Every time I search for flights, I end up in the same loop. I open Google Flights, pick a date range, sort by price, and then spend the next forty minutes manually checking whether that cheap connection through a questionable hub is going to get me stranded overnight, whether I need a transit visa I don't have, and whether the second leg is even operated by a different airline on a separate ticket. The cheapest result is never actually the cheapest result once you account for all of that.
+
+The tools we have are search tools. They surface options. The reasoning about whether those options are actually viable? That part is still on you.
+
+Flight Findr started from the frustration that no existing product treats cost and feasibility as a unified problem. I wanted to build something that would do what I was already doing in my head (running a mental checklist of risk factors against every candidate itinerary) but expose it as an explicit, auditable layer before anything gets shown to the user. The goal was not a smarter search box. The goal was a travel agent that reasons.
+
+## The Reasoning Cortex
+
+This is the part I am most proud of, and the part that shapes every other architectural decision in the project.
+
+Most agent demos lean entirely on the language model to figure out what is good and what is bad. The model gets a list of flight options, maybe some context about the user's preferences, and it writes back a recommendation. That works reasonably well for obvious cases. It falls apart the moment you hit edge cases: a connection that is technically legal on paper but gives you eleven minutes to clear immigration, a routing through an airport under an active operational disruption advisory, or a multi-city itinerary where one leg is on a separate ticket and a missed connection means buying an entirely new fare.
+
+The Reasoning Cortex is a deterministic feasibility layer that runs before any of that gets near the model. It is implemented in `src/agent/cortex.ts` and it evaluates every candidate itinerary against a structured set of checks. The cortex flags transit visa situations as either required or uncertain (and the behavior differs depending on whether the user's decision policy is `strict`, `balanced`, or `explore`). It checks for operational disruption advisories on airports and airspace regions. It assesses tight connection and overnight risk. It detects separate ticket exposure. The output of each check is a typed `pass`, `warn`, or `block` status that feeds directly into the constraint engine and scorer.
+
+The key design decision here is that these checks are not suggestions fed into a prompt. They are hard logic. A `block` from the cortex means the candidate is excluded before scoring even begins. A `warn` means it survives but carries a cost penalty that affects its final rank. The language model never sees a candidate that the cortex has already blocked. That separation is intentional: the model is good at synthesis and explanation, but it should not be in the business of overriding a clear feasibility signal.
+
+I also made the cortex configurable at the policy level precisely because not every traveler has the same tolerance for uncertainty. A `strict` policy blocks on uncertain transit visas. A `balanced` policy (the default) downgrades them instead. An `explore` policy relaxes the thresholds further for users who want to see more options and make the call themselves. The policy travels through the entire pipeline from prompt parsing all the way to the scoring weights.
+
+## How the Pipeline Works
+
+The pipeline starts with a user prompt, and the first job is to extract everything useful from it. The prompt parser (`src/agent/promptParser.ts`) pulls out origin, destination, and basic constraints, but it also does something I found genuinely fun to build: it reads intent hints. If the user types "strict routing only" or "no more than one stop" or "amadeus only" or "in two weeks," the parser picks all of that up and converts it into a structured request payload with a decision policy, a max stop count, a provider preference, and a date offset. The model does not have to guess what the user meant by "strict." The system already resolved it.
+
+From there, the planner (`src/agent/planner.ts`) expands the request into multiple route and date patterns. A single prompt like "cheapest way from MSP to HYD in two weeks" becomes a set of search patterns covering different routing strategies and date windows. This expansion is what lets the system find options the user would never have thought to try explicitly.
+
+The orchestrator (`src/agent/orchestrator.ts`) runs the search across every expanded pattern, hits the provider stack (more on that in a moment), and collects raw candidates. Those candidates go through the cortex feasibility layer, then the constraint engine (`src/agent/constraints.ts`) which enforces hard rules (maximum stops, blocked airports, blocked carriers) before anything reaches the scorer. The scorer (`src/agent/scorer.ts`) ranks the surviving candidates by `totalEffectiveCost`, using provider coverage evidence and risk score as tiebreakers. The final output includes the ranked list, the excluded list with reasons, the searched patterns, and explicit notes about which providers were not executed and why. That last part matters a lot to me: transparency about what was not searched is just as important as transparency about what was.
+
+## Provider Strategy and Fallbacks
+
+The provider stack has three tiers and the system walks down them gracefully.
+
+Amadeus is the primary live source. When credentials are present, the Amadeus client (`src/lib/amadeus.ts`) handles OAuth token management with an in-memory cache, applies a ten second request timeout, and returns raw flight offers that the normalizer (`src/lib/normalizer.ts`) converts into the canonical `ItineraryCandidate` schema. Serpapi Google Flights is the secondary live source: when an API key is available, it hits the Serpapi endpoint and runs the same normalization path. When neither live provider is available (or when they return empty results), the system falls back to constructed data so that the pipeline still produces a ranked output with all the cortex and scoring logic applied. The constructed fallback exists specifically so that development and testing do not require live credentials.
+
+The result caching layer (`src/lib/cache.ts`) sits in front of both live providers with a fifteen minute TTL, which matters for interactive use where a user might refine their prompt and retrigger the same underlying search.
+
+One thing I learned while building the normalizer: raw flight offer schemas from different providers are genuinely very different from each other, and writing a robust normalizer requires a lot of fixture coverage. The Serpapi normalization path is documented as "best effort" in the current state because Google Flights response shapes vary in ways that are hard to capture with a small test set. That is an honest limitation I have kept visible in the README rather than papering over it.
+
+## Challenges and Learnings
+
+The hardest part of this project was not any single technical problem. It was the discipline of keeping the deterministic layer deterministic.
+
+Early in the design I kept finding myself wanting to soften the cortex logic, to give the model more room to weigh in on edge cases. The temptation is real because LLMs are very good at sounding reasonable about tradeoffs. But I had to keep reminding myself why the cortex exists in the first place: the whole point is to have a layer that does not drift, that does not hallucinate a transit visa policy, and that does not score a blocked itinerary slightly lower rather than excluding it outright. Every time I caught myself thinking "maybe the model could handle this," I pushed that logic back into the deterministic layer instead.
+
+The schema-first approach (all data contracts defined in `src/lib/schemas.ts` using Zod) paid off repeatedly. Having a single source of truth for the cortex assessment types, the candidate shape, and the pipeline output meant that every time I extended the system, TypeScript caught the integration gaps immediately. The test suite runs at the schema boundary so I could be confident that provider normalization was producing valid candidates before the cortex ever saw them.
+
+The prompt parser was also more interesting than I expected. Natural language policy extraction (reading "strict" or "no layovers" or "show me everything" out of a free form travel request) requires some careful heuristics. I chose to keep this deterministic and regex-driven rather than using the model for it, which means it is predictable and testable but also limited in what phrasing it can handle. That tradeoff is documented and will be a natural place to invest when the project grows.
+
+## What is Next
+
+The most obvious gap is the UI layer. The backend pipeline is functional and fully tested (ten passing tests across the cortex, pipeline, prompt parser, normalizer, search strategy, and report surface), but the frontend still needs richer itinerary cards with per-candidate cortex badge rendering and an interactive exclusion panel. The analysis panel from `FlightDeckPanel.tsx` surfaces ranked output and provider coverage totals today, but there is a lot more signal in the pipeline output that deserves to be visible to the user.
+
+On the data side, the visa and advisory datasets are currently static. The tool interfaces are already shaped for an API swap (the `checkVisaRequirements` and `getOperationalAdvisories` tools have the right signatures), so plugging in live data sources is a contained change rather than an architectural one.
+
+The longer term direction I am most interested in is ground transport integration. Right now Flight Findr treats the itinerary as the journey from departure airport to arrival airport. The real total effective cost includes getting to the airport and from the arrival airport to wherever you are actually going. A route that routes you through a cheaper hub might be more expensive once you add an extra two hours of ground transit on each end. The Google Maps Distance Matrix integration is already reserved in the environment variable schema, which tells you where I am planning to go with this.
+
+The core insight that drove the whole project is still the one I believe in most: travel search tools surface options, but what travelers actually need is a tool that narrows the option space to the set that is genuinely viable for their situation and then ranks what is left by real total cost. The Reasoning Cortex is the architectural bet that says the way to build that is not to ask the model to be more careful, but to take the feasibility logic out of the model's hands entirely and make it a first-class, testable, auditable layer. That decision defines the shape of everything else in the system.
