@@ -62,7 +62,7 @@ featured: {
     <>
       Hi I&apos;m Sai!
       <br /> I am a Senior Applied AI Engineer at Target on the TrendBrain team, where I build
-      platforms for LLM evaluation, synthetic data generation, and trend intelligence.
+      cool AI tools and agents to speed up human efforts (not replace).
       <br />After hours, I travel the world and follow my curiosity.
     </>
   ),
@@ -89,7 +89,7 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Sai is a Minneapolis-based Senior Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. He currently works on the TrendBrain team at Target, where he leads the TrendSensing POC: a deep research system that uses multi-agent architecture to collect and analyze social media data for emerging fashion trends. His prior work includes building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs &amp; MLLMs), and Kafka-based GenAI Application Monitoring platforms.
+        Sai is a Minneapolis-based Senior Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. He currently works on the TrendBrain team at Target, where he works on the TrendSensing POC: a deep research system that uses multi-agent architecture to collect and analyze social media data for emerging fashion trends. His prior work includes building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs &amp; MLLMs), and Kafka-based GenAI Application Monitoring platforms.
       </>
     ),
   },
@@ -150,6 +150,12 @@ const about = {
       timeframe: "Oct 2024 - Apr 2026",
       role: "Applied AI Engineer / Software Engineer - Generative AI",
       achievements: [
+        <>
+          Worked on projects that cummulatively generated $24 million dollars in value to the company through various metrics.
+        </>,
+        <>
+          Created Target's largest and most complex ElasticSearch index for use with a custom Multi-Index Querying Hybrid Search.
+        </>
         <>
           Created and deployed a live GenAI application monitoring service using Kafka for on-the-go response evaluations.
         </>,
