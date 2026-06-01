@@ -154,7 +154,7 @@ const about = {
           Worked on projects that cummulatively generated $24 million dollars in value to the company through various metrics.
         </>,
         <>
-          Created Target's largest and most complex ElasticSearch index for use with a custom Multi-Index Querying Hybrid Search.
+          Created Target&apos;s largest and most complex ElasticSearch index for use with a custom Multi-Index Querying Hybrid Search.
         </>,
         <>
           Created and deployed a live GenAI application monitoring service using Kafka for on-the-go response evaluations.
