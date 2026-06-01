@@ -174,10 +174,10 @@ const mailchimp = {
 // default schema data
 const schema = {
   logo: "",
-  type: "Organization",
-  name: "Once UI",
+  type: "Person",
+  name: "Sai Suchir Tyada",
   description: home.description,
-  email: "lorant@once-ui.com",
+  email: "tyada.saisuchir@gmail.com",
 };
 
 // social links

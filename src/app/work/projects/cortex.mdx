@@ -1,0 +1,74 @@
+---
+title: "Cortex — An Organizational Memory Layer"
+summary: "I built an AI cognition system for teams: a persistent agent that ingests company knowledge, summarizes meetings, answers questions grounded in your org, and never forgets a decision made."
+publishedAt: "2026-05-31"
+images:
+    - "/images/projects/project-01/blogs/ai_zero_to_hero.png"
+tags: ["Python", "FastAPI", "LangGraph", "Neo4j", "RAG", "AI Agents", "Knowledge Graph", "Project Showcase"]
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## Project Motivation
+
+Every team I have ever been on has the same invisible problem: knowledge evaporates.
+
+A decision gets made on a Tuesday standup call, nobody writes it down, and six months later two engineers relitigate the exact same tradeoff from scratch. A new hire spends their first two weeks pinging people for context that already exists somewhere, buried in a Slack thread or a Confluence page nobody remembers exists. An architecture choice that seemed obvious at the time becomes a mystery artifact in the codebase with no paper trail explaining why it was made that way.
+
+I wanted to build something that actually fixes this. Not a better wiki (nobody keeps wikis up to date) and not a glorified search bar, but a system that thinks with the team. That's what Cortex is: an organizational AI cognition layer that ingests company knowledge, attends your meetings, extracts decisions, answers questions grounded in your actual company context, and never forgets a thing.
+
+The mental model I kept coming back to was a persistent AI teammate. Someone who has read every document in the repo, was present for every meeting, and can be asked "what did we decide about the authentication architecture" and give a real answer with references, not a hallucinated summary.
+
+## Architecture Overview
+
+The whole system is organized as a clean layered stack:
+
+```
+Frontend → API → Agent Orchestration → Memory → Databases
+```
+
+The **frontend** is a Next.js + React + TypeScript application styled with TailwindCSS and ShadCN, providing a chat interface, a knowledge graph explorer, a meeting intelligence view, a documentation generator, and an admin panel. The **API layer** is a FastAPI backend with thin routes (all business logic lives in the services layer, never in the route handlers) exposing endpoints like `/chat`, `/ingest`, `/meetings`, `/docs`, `/search`, and `/graph`. The **orchestration layer** is where the interesting work happens, driven by LangGraph and a `CoordinatorAgent` that routes every incoming request to the right specialized agent. Below that, the **memory layer** assembles the right context before any generation happens. And at the bottom, the **database layer** runs entirely in Docker Compose, with PostgreSQL plus pgvector for relational data and embeddings, Neo4j for the knowledge graph, Qdrant as the dedicated vector database, and Redis for caching.
+
+One design rule I held to throughout the whole project: agents do not touch databases directly. Every database access goes through a service. This keeps the agents focused on reasoning and keeps the data access patterns consistent and auditable. It also makes testing much easier (you can mock the service layer without spinning up databases).
+
+## The Agent Layer
+
+The orchestration architecture is built around the idea of specialized agents that are good at narrow things, coordinated by a router that is good at figuring out who should handle what.
+
+The **CoordinatorAgent** sits at the top. When a request comes in, it performs lightweight intent classification and decides which downstream agent should take it. This routing step runs before any expensive LLM calls happen for generation, which keeps costs down on straightforward queries. From there, control passes to one of four specialized agents depending on what was asked.
+
+The **SearchAgent** handles retrieval from the vector store. Its job is to pull the most relevant knowledge snippets given the query and return them as structured context for the generation step. The **KnowledgeAgent** takes that retrieved context and produces a grounded answer, using only what was actually retrieved rather than relying on model weights alone (which is exactly where hallucinations come from). The **DocumentationAgent** generates Markdown documentation using a retrieval first pipeline, so any docs it produces are grounded in what already exists in the knowledge base. And the **MeetingAgent** handles queries about meetings, pulling from stored meeting summaries and falling back to generation only when no stored summary is relevant.
+
+All of these agents operate inside a LangGraph graph. The pattern for each one is the same: plan, call tools, retrieve memory, reason, then respond. The graph state is typed and passed explicitly between nodes, which makes the reasoning trace visible and debuggable rather than hidden inside a chain of opaque function calls.
+
+## Memory System
+
+The memory architecture is the part of Cortex I spent the most time on, because getting it wrong is what causes AI systems to feel either amnesiac or overwhelmed.
+
+There are three distinct layers. **Short term memory** is assembled per request: the retrieval step pulls the most relevant document chunks and meeting summaries for the current query, and those get injected into the context window before any generation happens. **Working memory** is the LangGraph state object that travels through the graph while a request is being processed. It carries the classified intent, the retrieved sources, and a debug trace of which agents were invoked and why. This is ephemeral by design (it only exists for the duration of a single request routing cycle) and it is what lets agents pass structured information to each other without coupling them directly.
+
+**Long term memory** is where organizational knowledge actually lives. Documents ingested through the pipeline (Markdown files, PDFs, Git repositories, meeting transcripts) get chunked, embedded, and stored in Qdrant for vector retrieval and linked as entities in Neo4j for graph traversal. Meeting summaries are stored as first class documents in the same vector store so they can be retrieved semantically alongside any other organizational knowledge.
+
+The trickiest piece is conversation compaction. A conversation that runs long will eventually exceed what fits in any context window, and the naive approach (truncation) throws away exactly the context that makes the system useful. Instead, when a conversation grows beyond a threshold, the earlier turns get summarized and stored back into the long term memory store with the source tag `conversation:<conversation_id>:summary`. Later in the same conversation, those summaries get retrieved the same way any other document does. The conversation history stays compact, but the semantic content survives.
+
+## Challenges and Learnings
+
+The hardest design challenge was keeping retrieval quality high across a heterogeneous knowledge base. Documents have very different structures (a meeting transcript reads nothing like an architecture decision record), and a naive embedding approach treats them the same way. I ended up tagging documents by type at ingestion time and using those tags to filter retrieval at query time, so a query about meetings preferentially surfaces meeting summaries rather than API documentation.
+
+Getting the CoordinatorAgent routing right took more iteration than I expected. Early versions routed based on keywords (questions with "meeting" in them went to the MeetingAgent, and so on), but this breaks quickly on natural language queries that do not use the expected vocabulary. Switching to embedding based intent classification (comparing the query embedding to reference embeddings for each agent's domain) made routing much more robust, though it added latency to every request. Caching the intent classification for repeated or semantically similar queries brought that cost down considerably.
+
+The Neo4j knowledge graph is the piece I am most pleased with architecturally and the piece I had the most trouble operationalizing. The graph model (entities like People, Teams, Projects, Services, Documents, and Decisions connected by relationships like `works_on`, `owns`, `depends_on`, `authored`, and `affects`) is expressive and genuinely useful for questions like "who owns the billing system" or "what decisions affected the authentication service." But populating it automatically from ingested documents requires entity extraction that is good enough to be trusted, which is a much harder problem than it looks. The MVP uses a combination of structured document frontmatter and LLM based entity extraction for unstructured text, and the accuracy is decent but not production ready without human review in the loop.
+
+The security constraint (agents must not access databases directly, all access through services) felt like overhead at the start and felt like the most sanity saving discipline by the end. There were multiple moments during development where taking a shortcut to query the database from inside an agent would have been a five minute fix that created a six hour debugging session later. Keeping the service boundary firm was the right call.
+
+## What's Next
+
+The most valuable thing Cortex could do next is integrate directly with the tools teams already use. Right now, ingestion is manual (you point it at a directory of documents or upload a transcript). A Slack integration that automatically ingests messages and threads, a calendar integration that pulls meeting recordings and transcribes them, and a GitHub integration that indexes pull request discussions and commit messages would turn Cortex from a system you have to feed into one that grows on its own.
+
+The knowledge graph also deserves more investment. Right now it primarily enriches retrieval by providing relational context that vector search alone cannot capture. But a graph explorer UI that lets you navigate organizational relationships visually (who owns what, what projects depend on which services, how decisions propagated through the org over time) would make the graph a standalone tool rather than just a retrieval enhancer.
+
+On the memory side, I want to explore how long term memory ages gracefully: not all organizational knowledge stays equally relevant forever. A decision made three years ago about a system that no longer exists should be weighted differently from a decision made last week. Adding temporal relevance scoring to the retrieval pipeline would help Cortex stay grounded in what actually matters now rather than surfacing stale context with equal confidence.
+
+What I am most curious about is how Cortex would hold up in a real engineering organization over a full quarter. The architecture is designed for it. The memory system is designed for it. But there is no substitute for a real team asking real questions over a sustained period to find out where the edges are.

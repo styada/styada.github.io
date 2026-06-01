@@ -146,7 +146,7 @@ export default function About() {
               <Avatar src={person.avatar} size="xl" />
               <Flex gap="8" vertical="center">
                 <Icon onBackground="accent-weak" name="globe" />
-                {person.location}
+                {person.locationDisplay || person.location}
               </Flex>
               {person.languages.length > 0 && (
                 <Flex wrap gap="8">
@@ -230,6 +230,18 @@ export default function About() {
                       ),
                   )}
                 </Flex>
+              )}
+              {person.resume && (
+                <Button
+                  href={person.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  prefixIcon="document"
+                  label="Resume"
+                  size="s"
+                  weight="default"
+                  variant="secondary"
+                />
               )}
             </Column>
 

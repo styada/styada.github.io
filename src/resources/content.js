@@ -7,11 +7,13 @@ const person = {
   get name() {
     return `${this.firstName} ${this.lastName}`;
   },
-  role: "Applied AI Engineer",
+  role: "Senior Applied AI Engineer",
   avatar: "/images/avatar.jpg",
   email: "tyada.saisuchir@gmail.com",
   location: "America/Chicago", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  locationDisplay: "Minneapolis, MN",
   languages: ["English", "Hindi", "Telugu", "French"], // optional: Leave the array empty if you don't want to display languages
+  resume: "/documents/resume.pdf",
 };
 
 const newsletter = {
@@ -49,7 +51,7 @@ const home = {
   image: "/images/og/home.jpg",
   label: "Home",
   title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing the work and projects of ${person.name}.`,
+  description: `${person.name} is a Senior Applied AI Engineer at Target in Minneapolis, building GenAI platforms for LLM evaluation, synthetic data generation, and AI-powered trend intelligence. MS candidate in Computer Science at Georgia Tech.`,
   headline: <>Augmenting life with AI and curiosity</>,
 featured: {
      display: true,
@@ -59,8 +61,8 @@ featured: {
   subline: (
     <>
       Hi I&apos;m Sai!
-      <br /> I am an applied AI engineer at Target, where I work on enabling teams to build
-      AI-powered tools. 
+      <br /> I am a Senior Applied AI Engineer at Target on the TrendBrain team, where I build
+      cool AI tools and agents to speed up human efforts (not replace).
       <br />After hours, I travel the world and follow my curiosity.
     </>
   ),
@@ -70,7 +72,7 @@ const about = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `Meet ${person.name}, ${person.role} from Minneapolis, MN. Building GenAI platforms for LLM evaluation, synthetic data generation, and trend intelligence at Target. MS candidate at Georgia Tech.`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -79,7 +81,7 @@ const about = {
     display: true,
   },
   calendar: {
-    display: true,
+    display: false,
     link: "https://calendly.com/styada3-gatech/30min",
   },
   intro: {
@@ -87,8 +89,7 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Sai is a Minneapolis-based Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. 
-        His work involves building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs &amp; MLLMs), and Kafka-based Appplication Monitoring platform. 
+        Sai is a Minneapolis-based Senior Applied AI Engineer and MS candidate at Georgia Tech with a passion for creating AI tools that augment (not replace) humans and their work. He currently works on the TrendBrain team at Target, where he works on the TrendSensing POC: a deep research system that uses multi-agent architecture to collect and analyze social media data for emerging fashion trends. His prior work includes building Target&apos;s internal LLM Evaluation platforms, Synthetic Data Generation platforms (LLMs &amp; MLLMs), and Kafka-based GenAI Application Monitoring platforms.
       </>
     ),
   },
@@ -128,9 +129,33 @@ const about = {
       {
       company: "Target",
       image: "/images/companies/target.png",
-      timeframe: "Oct 2024 - Present",
+      timeframe: "Apr 2026 - Present",
+      role: "Senior Applied AI Engineer - TrendBrain",
+      achievements: [
+        <>
+          Leading the TrendSensing POC: a deep research system using multi-agent architecture to collect and analyze social media data for emerging fashion trends.
+        </>,
+        <>
+          Building deep agent systems that reason about trend emergence from diverse data sources including runway images, social feeds, and purchasing patterns.
+        </>,
+        <>
+          Collaborating with the Advanced AI team to push TrendBrain from reactive trend tracking toward proactive trend prediction.
+        </>,
+      ],
+      images: [],
+    },
+    {
+      company: "Target",
+      image: "/images/companies/target.png",
+      timeframe: "Oct 2024 - Apr 2026",
       role: "Applied AI Engineer / Software Engineer - Generative AI",
       achievements: [
+        <>
+          Worked on projects that cummulatively generated $24 million dollars in value to the company through various metrics.
+        </>,
+        <>
+          Created Target&apos;s largest and most complex ElasticSearch index for use with a custom Multi-Index Querying Hybrid Search.
+        </>,
         <>
           Created and deployed a live GenAI application monitoring service using Kafka for on-the-go response evaluations.
         </>,
@@ -276,40 +301,38 @@ const about = {
     ],
   },
   technical: {
-    display: false, // set to false to hide this section
-    title: "Technical skills",
+    display: true,
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        title: "Python",
+        description: <>Primary language for AI and ML engineering. LangGraph, FastAPI, data pipelines, agentic systems, and production GenAI services.</>,
+        images: [],
       },
       {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        title: "LLM Evaluation and Synthetic Data",
+        description: <>Built production LLM evaluation platforms and multimodal synthetic data generation pipelines serving thousands of requests at Target.</>,
+        images: [],
+      },
+      {
+        title: "Multi-Agent Systems",
+        description: <>Designed hierarchical agent orchestration systems using LangGraph for complex reasoning workflows including trend research and code generation.</>,
+        images: [],
+      },
+      {
+        title: "RAG and Knowledge Graphs",
+        description: <>Production RAG pipelines, Neo4j knowledge graphs, vector search with pgvector and Qdrant, and local RAG systems for private use cases.</>,
+        images: [],
+      },
+      {
+        title: "TypeScript and Next.js",
+        description: <>Full stack applications across production retail systems and personal portfolio projects.</>,
+        images: [],
+      },
+      {
+        title: "Streaming and Event-Driven Architecture",
+        description: <>Kafka based monitoring for GenAI services, Redis Streams for task queuing, event driven orchestration for agent coordination.</>,
+        images: [],
       },
     ],
   },
@@ -318,7 +341,7 @@ const about = {
 const blog = {
   path: "/blog",
   label: "Blog",
-  title: "Some stuff I've wanted to write about",
+  title: "Writing on AI Engineering, GenAI, and Machine Learning",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
@@ -328,7 +351,7 @@ const work = {
   path: "/work",
   label: "Work",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
+  description: `AI engineering projects and case studies by ${person.name}: multi-agent systems, LLM evaluation, RAG, and generative AI platforms.`,
   // Create new project pages by adding a new .mdx file to app/blog/posts
   // All projects will be listed on the /home and /work routes
 };
