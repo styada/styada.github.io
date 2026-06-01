@@ -155,7 +155,7 @@ const about = {
         </>,
         <>
           Created Target's largest and most complex ElasticSearch index for use with a custom Multi-Index Querying Hybrid Search.
-        </>
+        </>,
         <>
           Created and deployed a live GenAI application monitoring service using Kafka for on-the-go response evaluations.
         </>,
