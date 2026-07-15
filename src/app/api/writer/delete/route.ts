@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { rm } from "fs/promises";
-import { getPostDir, slugify, type WriterKind } from "@/utils/writer";
+import { getPostDir, getImageRoot, slugify, type WriterKind } from "@/utils/writer";
 
 export const dynamic = "force-dynamic";
 
@@ -37,10 +37,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Post not found" }, { status: 404 });
   }
 
-  // Optionally clean up the image directory for this post
-  const imageRoot = kind === "blog"
-    ? path.join(process.cwd(), "public", "images", "blog", slug)
-    : path.join(process.cwd(), "public", "images", "projects", slug);
+  // Clean up the image directory for this post (uses shared helper for path consistency)
+  const imageRoot = path.join(getImageRoot(kind), slug);
 
   try {
     await rm(imageRoot, { recursive: true, force: true });
