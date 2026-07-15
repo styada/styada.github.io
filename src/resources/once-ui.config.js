@@ -9,6 +9,7 @@ const routes = {
   "/work": true,
   "/blog": true,
   "/gallery": true,
+  "/writer": process.env.NODE_ENV !== "production",
 };
 
 const display = {

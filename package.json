@@ -6,7 +6,9 @@
     "export": "next export",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "new:blog": "node scripts/new-post.mjs blog",
+    "new:work": "node scripts/new-post.mjs work"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
