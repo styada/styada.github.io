@@ -689,7 +689,7 @@ export function WriterClient({ posts }: WriterClientProps) {
                 {draft.originalPath && <span className={styles.chip}>{draft.originalPath}</span>}
               </div>
               <div className={styles.status}>{status}</div>
-              <Flex gap="8" wrap="wrap">
+              <Flex gap="8" wrap>
                 <button
                   className={styles.miniButton}
                   type="button"
