@@ -1,7 +1,7 @@
 import { home } from "./content";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL = "https://saisuchirtyada.com";
+const baseURL = "https://www.saisuchirtyada.com";
 
 const routes = {
   "/": true,
