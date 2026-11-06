@@ -1,0 +1,49 @@
+---
+title: "What AI Ethics Actually Taught Me About Building AI"
+summary: "I spent a semester studying algorithmic harm, predictive profiling, and the second order effects of AI at scale. Here is what actually changed about how I build."
+publishedAt: "2026-05-31"
+image: "/images/projects/project-01/blogs/ai_zero_to_hero.png"
+tag: "Blog"
+team:
+  - name: "Sai Suchir Tyada"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/saisuchirtyada/"
+---
+
+## The Gap Nobody Talks About
+
+I have shipped GenAI features to production that I was genuinely proud of. The accuracy numbers were solid, the latency was acceptable, and the demos made people lean forward in their seats. For a while, that felt like the whole job.
+
+Then I enrolled in the AI Ethics and Society course at Georgia Tech (part of the OMSCS program) mostly because I needed the elective credits and it sounded more interesting than another algorithms refresher. I went in expecting a philosophy class dressed up in computer science clothing. What I got was closer to a mirror pointed at my own work.
+
+## What the Literature Actually Says
+
+The two pieces of reading that hit hardest were Cathy O'Neil's "Weapons of Math Destruction" and a 2013 study by Kosinski and colleagues that I still think about regularly.
+
+O'Neil's book is not about AI in the flashy, headline sense. It is about the quieter, more pervasive kind: the credit scoring algorithms that decide whether you can rent an apartment, the recidivism models that influence sentencing, the hiring filters that screen your resume before a human ever reads it. Her argument (the one that stuck with me most) is not that these systems are malicious. Most of them are built by people trying to do good work. The problem is that when you optimize for a proxy metric at scale, and when the model is opaque enough that nobody can contest its output, you have built something that can cause real harm while appearing perfectly functional. The model reports 92% accuracy. The person denied parole does not get to see the 8%.
+
+The Kosinski paper was a different kind of unsettling. The study showed that Facebook likes alone (the things you casually click throughout your day without much thought) could be used to predict sexual orientation, political views, religious beliefs, and personality traits with genuinely alarming accuracy. Nobody told the algorithm what those likes meant. It figured out the correlations on its own. The implication is that any large behavioral dataset is probably a surveillance instrument whether or not you designed it to be one. Both of these things were true before the current wave of generative AI. Now scale everything up by orders of magnitude and see how that sits with you.
+
+## The Shift
+
+Before the course, ethics in AI felt like something that lived in a legal review or a fairness disclaimer at the bottom of a model card. You checked a box and moved on. After the course, I started asking questions that had no clean answers and that kept surfacing during actual engineering work.
+
+The first shift was about training data. When you adapt a model on historical records (customer interactions, hiring decisions, support tickets), you are encoding the patterns of whoever made those decisions before you. If those decisions reflected bias (and most organizational data does, in ways that are boring and structural rather than dramatic), you are not building a neutral system. You are compressing the past into something that runs faster and at greater scale. That realization changed how I think about what I am actually building when I reach for a dataset.
+
+The second shift was about asymmetric consequences. There is a question I now ask before shipping anything: what happens to the person the model gets wrong? In a lot of GenAI work, the cost of an error is low. The summary is slightly off, the suggested reply is awkward, the recommendation misses the mark. You shrug and regenerate. But in some domains (and more systems touch these domains than engineers typically admit), a wrong prediction carries consequences the user cannot undo. A loan application flagged incorrectly. A resume screened out before anyone reads it. A medical triage that routes someone to the wrong level of care. The benchmark accuracy looks identical in both scenarios. The harm does not.
+
+The third shift changed my evaluation habits the most. I started asking who the user is that I am not thinking about. When you build a system, you optimize for the user in your head (usually someone who resembles you or your immediate colleagues). The edge cases, the users with unusual names, the people who communicate in registers the training data did not represent well, the users navigating your system under stress or with limited context, those people reveal problems that do not show up in aggregate metrics. I now treat evaluation sets as a question rather than a formality: does this include people who are not like the people who built it?
+
+## Practical Questions Worth Carrying With You
+
+None of this requires a formal ethics course. But it does require slowing down long enough to sit with a few uncomfortable things. What is the realistic worst case outcome if this model is confidently wrong? Who populated the training data and what decisions did they make? Is the accuracy number you are proud of an average that masks poor performance for a specific subgroup? If this system is deployed at scale and nobody is actively watching it, what does it drift toward over time?
+
+These are not questions that block deployment. They are questions that change what you build, what safeguards you add, and what you monitor after launch. There is a version of each of these that fits into a normal engineering workflow without turning every sprint into a philosophy seminar. The trick is building the habit of asking before you are in the middle of an incident.
+
+## Closing
+
+I did not come out of the AIES course convinced that AI is inherently dangerous or that engineers need to stop and become ethicists before touching a keyboard. I came out of it convinced that "it works" and "it works well for everyone" are different claims, and that conflating them is easy to do when your benchmark looks good and your team is shipping fast.
+
+The O'Neil book made it harder to look at a model card and feel done. The Kosinski paper made it harder to look at a training dataset and assume neutrality. The accumulated weight of thinking through second and third order effects at scale made me a slower, more critical reviewer of my own work (which my team would probably confirm, not entirely as a compliment).
+
+You do not have to take an ethics course to think about any of this. But it helped to be forced to slow down, read the literature carefully, and look honestly at what I was actually building. That slowness, I think, is worth something.
